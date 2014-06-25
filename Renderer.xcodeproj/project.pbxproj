@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */; };
+		2F1B69C01957FCEC005D6C83 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */; };
 		2FF83ACA195751DC00A1682E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF83AC9195751DC00A1682E /* Cocoa.framework */; };
 		2FF83AD4195751DC00A1682E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FF83AD2195751DC00A1682E /* InfoPlist.strings */; };
 		2FF83AD6195751DC00A1682E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83AD5195751DC00A1682E /* main.m */; };
@@ -18,6 +20,8 @@
 		2FF83AEA195751DC00A1682E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF83AC9195751DC00A1682E /* Cocoa.framework */; };
 		2FF83AF2195751DC00A1682E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FF83AF0195751DC00A1682E /* InfoPlist.strings */; };
 		2FF83AF4195751DC00A1682E /* RendererTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83AF3195751DC00A1682E /* RendererTests.m */; };
+		2FF83AFE195751F500A1682E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF83AFD195751F500A1682E /* OpenGL.framework */; };
+		2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83B0319575F4300A1682E /* Renderer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BAROpenGLView.mm; sourceTree = "<group>"; };
+		2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2FF83AC6195751DC00A1682E /* Renderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Renderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FF83AC9195751DC00A1682E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2FF83ACC195751DC00A1682E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -50,6 +56,10 @@
 		2FF83AEF195751DC00A1682E /* RendererTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RendererTests-Info.plist"; sourceTree = "<group>"; };
 		2FF83AF1195751DC00A1682E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FF83AF3195751DC00A1682E /* RendererTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RendererTests.m; sourceTree = "<group>"; };
+		2FF83AFD195751F500A1682E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		2FF83AFF1957549500A1682E /* BAROpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAROpenGLView.h; sourceTree = "<group>"; };
+		2FF83B0319575F4300A1682E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		2FF83B0419575F4300A1682E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +67,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F1B69C01957FCEC005D6C83 /* QuartzCore.framework in Frameworks */,
+				2FF83AFE195751F500A1682E /* OpenGL.framework in Frameworks */,
 				2FF83ACA195751DC00A1682E /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -95,6 +107,8 @@
 		2FF83AC8195751DC00A1682E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */,
+				2FF83AFD195751F500A1682E /* OpenGL.framework */,
 				2FF83AC9195751DC00A1682E /* Cocoa.framework */,
 				2FF83AE8195751DC00A1682E /* XCTest.framework */,
 				2FF83ACB195751DC00A1682E /* Other Frameworks */,
@@ -115,8 +129,11 @@
 		2FF83ACF195751DC00A1682E /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				2FF83B0219575F2600A1682E /* Renderer */,
 				2FF83ADB195751DC00A1682E /* BARAppDelegate.h */,
 				2FF83ADC195751DC00A1682E /* BARAppDelegate.m */,
+				2FF83AFF1957549500A1682E /* BAROpenGLView.h */,
+				2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */,
 				2FF83ADE195751DC00A1682E /* MainMenu.xib */,
 				2FF83AE1195751DC00A1682E /* Images.xcassets */,
 				2FF83AD0195751DC00A1682E /* Supporting Files */,
@@ -152,6 +169,15 @@
 				2FF83AF0195751DC00A1682E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2FF83B0219575F2600A1682E /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				2FF83B0319575F4300A1682E /* Renderer.cpp */,
+				2FF83B0419575F4300A1682E /* Renderer.h */,
+			);
+			name = Renderer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -253,8 +279,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */,
 				2FF83ADD195751DC00A1682E /* BARAppDelegate.m in Sources */,
 				2FF83AD6195751DC00A1682E /* main.m in Sources */,
+				2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,6 +495,7 @@
 				2FF83AF9195751DC00A1682E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2FF83AFA195751DC00A1682E /* Build configuration list for PBXNativeTarget "RendererTests" */ = {
 			isa = XCConfigurationList;
@@ -475,6 +504,7 @@
 				2FF83AFC195751DC00A1682E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
