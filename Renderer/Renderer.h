@@ -11,52 +11,52 @@
 
 #include <OpenGL/gl3.h>
 
+#include "Shader.h"
+#include "Mesh.h"
+
 namespace BAR {
-    struct Vertex {
-        GLfloat position[3];
-        GLfloat color[4];
+    
+    struct RenderableContext {
+        //
+        MeshAttribute *vertices;
+        MeshAttribute *normals;
+        //MesshAttribure *textCoords;
+        MeshAttribute *elements;
+        //
+        //char *textureFilename;
+        // Full path
+        Shader *shader;
     };
     
-    enum RenderableBufferType {
-        VERTEX = 0,
-        NORMAL,
-        COLOR
-    };
-    
-    enum VertexAttribOffset {
-        POS_ATTRIB = 0,
-        NORMAL_ATTRIB,
-        COLOR_ATTRIB
+    struct RendererContext {
+        float width;
+        float height;
+        uint32_t renderableContextCount;
+        RenderableContext *renderableContexts;
     };
     
     struct Renderable {
-        GLuint vao;
-        GLuint attrib;
-        GLuint buffers[3];
-        GLuint program;
-        GLint vertexPositionAttribute;
-        GLint pUniform;
-        GLint mvUniform;
+        Mesh *mesh;
     };
     
     class Renderer {
     public:
-        Renderer();
+        Renderer(RendererContext &context);
         virtual ~Renderer();
-        void draw();
+        void draw() const;
         void resize(float width, float height);
     private:
-        void clear();
-        void drawObjects();
+        void clear() const;
+        void drawObjects() const;
         
-        void initializeRenderables();
-        void initializeBuffers(Renderable &renderable);
-        void initializeShaders(Renderable &renderable);
+        void initializeRenderables(uint32_t count, const RenderableContext *contexts);
         
         void clearRenderables();
         
         uint32_t renderableCount;
         Renderable *renderables;
+        GLfloat viewWidth;
+        GLfloat viewHeight;
     };
 }
 

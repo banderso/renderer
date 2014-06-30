@@ -9,13 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 
-#import <OpenGL/OpenGL.h>
-#import <OpenGL/gl3.h>
-
 @interface BAROpenGLView : NSOpenGLView {
     CVDisplayLinkRef displayLink;
 }
-
-- (void) drawRect:(NSRect)dirtyRect;
 
 @end
