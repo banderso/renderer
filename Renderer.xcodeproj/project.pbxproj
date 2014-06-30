@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */; };
 		2F1B69C01957FCEC005D6C83 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */; };
+		2F1B69C5195A57A5005D6C83 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69C4195A57A5005D6C83 /* vector.c */; };
+		2F1B69C8195A5840005D6C83 /* matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69C7195A5840005D6C83 /* matrix.c */; };
+		2F1B69CC195A6174005D6C83 /* default.frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B69CB195A6174005D6C83 /* default.frag.glsl */; };
+		2F1B69CE195A617F005D6C83 /* default.vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B69CD195A617F005D6C83 /* default.vert.glsl */; };
 		2FF83ACA195751DC00A1682E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF83AC9195751DC00A1682E /* Cocoa.framework */; };
 		2FF83AD4195751DC00A1682E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2FF83AD2195751DC00A1682E /* InfoPlist.strings */; };
 		2FF83AD6195751DC00A1682E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83AD5195751DC00A1682E /* main.m */; };
@@ -22,6 +26,13 @@
 		2FF83AF4195751DC00A1682E /* RendererTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83AF3195751DC00A1682E /* RendererTests.m */; };
 		2FF83AFE195751F500A1682E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF83AFD195751F500A1682E /* OpenGL.framework */; };
 		2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83B0319575F4300A1682E /* Renderer.cpp */; };
+		2FFA794E195F983300A55D48 /* glutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA794D195F983300A55D48 /* glutil.c */; };
+		2FFA7950195F9A4400A55D48 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA794F195F9A4400A55D48 /* fileutil.cpp */; };
+		2FFA7954195FAB2500A55D48 /* shaderutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA7953195FAB2500A55D48 /* shaderutil.cpp */; };
+		2FFA7957195FAFB700A55D48 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA7955195FAFB700A55D48 /* Shader.cpp */; };
+		2FFA795A1960CAF400A55D48 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA79581960CAF400A55D48 /* Material.cpp */; };
+		2FFA795D1960D53600A55D48 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA795B1960D53600A55D48 /* Mesh.cpp */; };
+		2FFA795F19612ECE00A55D48 /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2FFA795E19612ECE00A55D48 /* TODO.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +48,12 @@
 /* Begin PBXFileReference section */
 		2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BAROpenGLView.mm; sourceTree = "<group>"; };
 		2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		2F1B69C4195A57A5005D6C83 /* vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vector.c; sourceTree = "<group>"; };
+		2F1B69C6195A57AE005D6C83 /* vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
+		2F1B69C7195A5840005D6C83 /* matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = matrix.c; sourceTree = "<group>"; };
+		2F1B69C9195A5847005D6C83 /* matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
+		2F1B69CB195A6174005D6C83 /* default.frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = default.frag.glsl; sourceTree = "<group>"; };
+		2F1B69CD195A617F005D6C83 /* default.vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = default.vert.glsl; sourceTree = "<group>"; };
 		2FF83AC6195751DC00A1682E /* Renderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Renderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FF83AC9195751DC00A1682E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		2FF83ACC195751DC00A1682E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -60,6 +77,19 @@
 		2FF83AFF1957549500A1682E /* BAROpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAROpenGLView.h; sourceTree = "<group>"; };
 		2FF83B0319575F4300A1682E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		2FF83B0419575F4300A1682E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		2FFA794C195F982A00A55D48 /* glutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glutil.h; sourceTree = "<group>"; };
+		2FFA794D195F983300A55D48 /* glutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glutil.c; sourceTree = "<group>"; };
+		2FFA794F195F9A4400A55D48 /* fileutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileutil.cpp; sourceTree = "<group>"; };
+		2FFA7951195F9A4C00A55D48 /* fileutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fileutil.h; sourceTree = "<group>"; };
+		2FFA7952195FAA6500A55D48 /* shaderutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shaderutil.h; sourceTree = "<group>"; };
+		2FFA7953195FAB2500A55D48 /* shaderutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shaderutil.cpp; sourceTree = "<group>"; };
+		2FFA7955195FAFB700A55D48 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
+		2FFA7956195FAFB700A55D48 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
+		2FFA79581960CAF400A55D48 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		2FFA79591960CAF400A55D48 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		2FFA795B1960D53600A55D48 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		2FFA795C1960D53600A55D48 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		2FFA795E19612ECE00A55D48 /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +115,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F1B69CA195A610C005D6C83 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				2F1B69CB195A6174005D6C83 /* default.frag.glsl */,
+				2F1B69CD195A617F005D6C83 /* default.vert.glsl */,
+			);
+			name = Shaders;
+			sourceTree = "<group>";
+		};
 		2FF83ABD195751DC00A1682E = {
 			isa = PBXGroup;
 			children = (
@@ -136,7 +175,9 @@
 				2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */,
 				2FF83ADE195751DC00A1682E /* MainMenu.xib */,
 				2FF83AE1195751DC00A1682E /* Images.xcassets */,
+				2F1B69CA195A610C005D6C83 /* Shaders */,
 				2FF83AD0195751DC00A1682E /* Supporting Files */,
+				2FFA795E19612ECE00A55D48 /* TODO.txt */,
 			);
 			path = Renderer;
 			sourceTree = "<group>";
@@ -176,6 +217,22 @@
 			children = (
 				2FF83B0319575F4300A1682E /* Renderer.cpp */,
 				2FF83B0419575F4300A1682E /* Renderer.h */,
+				2FFA795B1960D53600A55D48 /* Mesh.cpp */,
+				2FFA795C1960D53600A55D48 /* Mesh.h */,
+				2FFA794F195F9A4400A55D48 /* fileutil.cpp */,
+				2FFA7951195F9A4C00A55D48 /* fileutil.h */,
+				2FFA794D195F983300A55D48 /* glutil.c */,
+				2FFA794C195F982A00A55D48 /* glutil.h */,
+				2F1B69C4195A57A5005D6C83 /* vector.c */,
+				2F1B69C6195A57AE005D6C83 /* vector.h */,
+				2F1B69C7195A5840005D6C83 /* matrix.c */,
+				2F1B69C9195A5847005D6C83 /* matrix.h */,
+				2FFA7952195FAA6500A55D48 /* shaderutil.h */,
+				2FFA7953195FAB2500A55D48 /* shaderutil.cpp */,
+				2FFA7955195FAFB700A55D48 /* Shader.cpp */,
+				2FFA7956195FAFB700A55D48 /* Shader.h */,
+				2FFA79581960CAF400A55D48 /* Material.cpp */,
+				2FFA79591960CAF400A55D48 /* Material.h */,
 			);
 			name = Renderer;
 			sourceTree = "<group>";
@@ -258,9 +315,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FF83AD4195751DC00A1682E /* InfoPlist.strings in Resources */,
+				2F1B69CE195A617F005D6C83 /* default.vert.glsl in Resources */,
 				2FF83AE2195751DC00A1682E /* Images.xcassets in Resources */,
 				2FF83ADA195751DC00A1682E /* Credits.rtf in Resources */,
+				2FFA795F19612ECE00A55D48 /* TODO.txt in Resources */,
 				2FF83AE0195751DC00A1682E /* MainMenu.xib in Resources */,
+				2F1B69CC195A6174005D6C83 /* default.frag.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,9 +339,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FFA7957195FAFB700A55D48 /* Shader.cpp in Sources */,
 				2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */,
+				2FFA7950195F9A4400A55D48 /* fileutil.cpp in Sources */,
 				2FF83ADD195751DC00A1682E /* BARAppDelegate.m in Sources */,
+				2FFA795A1960CAF400A55D48 /* Material.cpp in Sources */,
+				2FFA7954195FAB2500A55D48 /* shaderutil.cpp in Sources */,
+				2FFA795D1960D53600A55D48 /* Mesh.cpp in Sources */,
+				2F1B69C8195A5840005D6C83 /* matrix.c in Sources */,
+				2FFA794E195F983300A55D48 /* glutil.c in Sources */,
 				2FF83AD6195751DC00A1682E /* main.m in Sources */,
+				2F1B69C5195A57A5005D6C83 /* vector.c in Sources */,
 				2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

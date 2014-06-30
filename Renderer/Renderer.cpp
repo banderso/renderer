@@ -90,8 +90,6 @@ void BAR::Renderer::initializeRenderables(uint32_t count, const RenderableContex
                                    nullptr,
                                    context.elements,
                                    new Material(i, context.shader));
-        //std::cout << "Error: " << GetGLErrorString(glGetError()) << "\n" << std::flush;
-        
     }
     
     this->renderables = renderables;
