@@ -22,7 +22,7 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 - (void) initGLContext;
 - (void) initGL;
 - (void) cleanUp;
-- (void) drawView;
+- (void) drawView:(float)delta;
 - (CVReturn) getFrameForTime:(const CVTimeStamp *)outputTime;
 
 @end
@@ -30,6 +30,9 @@ static CVReturn displayLinkCallback(CVDisplayLinkRef displayLink,
 @implementation BAROpenGLView
 
 BAR::Renderer *renderer;
+float frequency = 0.0f;
+float lastTime = 0.0f;
+float lastDelta = 0.0f;
 
 - (id)initWithFrame:(NSRect)frameRect pixelFormat:(NSOpenGLPixelFormat *)format
 {
@@ -88,7 +91,7 @@ BAR::Renderer *renderer;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [self drawView];
+    [self drawView: lastDelta];
 }
 
 - (void)reshape
@@ -142,6 +145,7 @@ BAR::Renderer *renderer;
     [self setOpenGLContext:context];
     
     [self setWantsBestResolutionOpenGLSurface:YES];
+    frequency = CVGetHostClockFrequency();
 }
 
 - (void)initGL
@@ -160,11 +164,23 @@ BAR::Renderer *renderer;
     shader = new BAR::Shader(concat(basePath, "/default.vert.glsl"),
                              concat(basePath, "/default.frag.glsl"));
     
-    GLfloat vertices[] = {
+    /*GLfloat vertices[] = {
         -1.0f,  1.0f, 0.0f,
          1.0f,  1.0f, 0.0f,
          1.0f, -1.0f, 0.0f,
         -1.0f, -1.0f, 0.0f
+    };*/
+    
+    GLfloat vertices[] = {
+        -1.0f,  1.0f,  1.0f, // 0
+        -1.0f,  1.0f, -1.0f, // 1
+         1.0f,  1.0f, -1.0f, // 2
+         1.0f,  1.0f,  1.0f, // 3
+        
+        -1.0f, -1.0f,  1.0f, // 4
+        -1.0f, -1.0f, -1.0f, // 5
+         1.0f, -1.0f, -1.0f, // 6
+         1.0f, -1.0f,  1.0f, // 7
     };
     
     GLfloat normal_vals[] = {
@@ -175,8 +191,12 @@ BAR::Renderer *renderer;
     };
 
     GLuint element_vals[] = {
-        0, 1, 2,
-        0, 2, 3
+        0, 1, 2,  0, 2, 3, // top
+        0, 3, 4,  4, 3, 7, // front
+        7, 3, 6,  6, 3, 2, // right
+        6, 7, 5,  5, 7, 4, // bottom
+        6, 2, 5,  5, 2, 1, // back
+        1, 4, 0,  1, 5, 4 // left
     };
     
     BAR::MeshAttribute positions = {
@@ -231,14 +251,27 @@ BAR::Renderer *renderer;
     delete renderer;
 }
 
-- (void)drawView
+- (int64_t) calcDelta:(int64_t)now
+{
+    int64_t newDelta = 0;
+    if (lastTime) {
+        newDelta = now - lastTime;
+    }
+    
+    lastTime = now;
+    lastDelta = newDelta;
+    
+    return newDelta;
+}
+
+- (void)drawView:(float)delta
 {
     [[self openGLContext] makeCurrentContext];
     
     CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
     CGLLockContext(cglContext);
     
-    renderer->draw();
+    renderer->draw(delta);
     
     CGLFlushDrawable(cglContext);
     CGLUnlockContext(cglContext);
@@ -246,7 +279,16 @@ BAR::Renderer *renderer;
 
 - (CVReturn)getFrameForTime:(const CVTimeStamp *)outputTime
 {
-    [self drawView];
+    uint64_t hostTime = outputTime->hostTime;
+    float now = (float)hostTime / frequency;
+    
+    if (now >= lastTime + (1.0f / 60.0f)) {
+        lastDelta = now - lastDelta;
+        lastTime = now;
+    
+        [self drawView:lastDelta];
+    }
+    
     return kCVReturnSuccess;
 }
 
