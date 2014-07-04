@@ -1,3 +1,4 @@
+// -*- mode: C++; -*-
 //
 //  Shader.h
 //  Renderer
@@ -12,29 +13,29 @@
 #include <OpenGL/gl3.h>
 
 namespace BAR {
-    class Shader {
-    public:
-        Shader(const char *vertexShaderFilename,
-               const char *fragmentShaderFilename);
-        virtual ~Shader();
+class Shader {
+ public:
+  Shader(const char *vertexShaderFilename,
+         const char *fragmentShaderFilename);
+  virtual ~Shader();
         
-        GLint getUniformLocation(const char *uniformName) const;
+  GLint getUniformLocation(const char *uniformName) const;
         
-        void activate() const;
+  void activate() const;
         
-        void listAttributes() const;
-        void listUniforms() const;
+  void listAttributes() const;
+  void listUniforms() const;
         
-    private:
-        Shader();
-        const char *vertexShaderFilename;
-        const char *fragmentShaderFilename;
+ private:
+  Shader();
+  const char *vertexShaderFilename;
+  const char *fragmentShaderFilename;
         
-        GLuint vertexShader;
-        GLuint fragmentShader;
+  GLuint vertexShader;
+  GLuint fragmentShader;
         
-        GLuint program;
-    };
+  GLuint program;
+};
 }
 
 #endif /* defined(__Renderer__Shader__) */

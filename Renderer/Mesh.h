@@ -1,3 +1,4 @@
+// -*- mode: C++; -*-
 //
 //  Mesh.h
 //  Renderer
@@ -14,56 +15,79 @@
 #include "Material.h"
 
 namespace BAR {
-    enum BufferType {
-        VERTEX = 0,
-        NORMAL,
-        TEXTURE,
-        ELEMENT,
+enum BufferType {
+  VERTEX = 0,
+  NORMAL,
+  TEXTURE,
+  ELEMENT,
         
-        COUNT // MUST ALWAYS be the LAST value
-    };
+  COUNT // MUST ALWAYS be the LAST value
+};
     
-    enum AttribOffset {
-        POS_ATTRIB = 0,
-        NORMAL_ATTRIB,
-        TEX_ATTRIB,
-        ELEMENT_ATTRIB
-    };
+enum AttribOffset {
+  POS_ATTRIB = 0,
+  NORMAL_ATTRIB,
+  TEX_ATTRIB,
+  ELEMENT_ATTRIB
+};
     
-    struct MeshAttribute {
-        GLvoid *data;
-        GLenum data_type;
-        GLuint data_size;
-        GLsizei data_array_size;
-    };
+union Vec3 {
+  struct {
+    GLfloat x;
+    GLfloat y;
+    GLfloat z;
+  };
+  GLfloat xyz[3];
+};
     
-    class Mesh {
-    public:
-        Mesh(uint32_t key,
-             MeshAttribute *positions,
-             MeshAttribute *normals,
-             MeshAttribute *texcoords,
-             MeshAttribute *elements,
-             Material *material);
-        ~Mesh();
+struct MeshAttribute {
+  GLvoid *data;
+  GLenum data_type;
+  GLuint data_size;
+  GLsizei data_array_size;
+};
+    
+class Mesh {
+ public:
+  Mesh(uint32_t key,
+       MeshAttribute *positions,
+       MeshAttribute *normals,
+       MeshAttribute *texcoords,
+       MeshAttribute *elements,
+       Material *material);
+  ~Mesh();
         
-        void activate() const;
-        void bindProjection(GLfloat *projection) const;
-        void bindModelView(GLfloat *modelView) const;
+  void update(float delta);
         
-        GLenum getElementType() const;
-        GLsizei getElementCount() const;
+  void activate() const;
+  void bindProjection(GLfloat *projection) const;
+  void bindModelView();
+  //void bindModelView(GLfloat *modelView) const;
         
-    private:
-        Mesh();
+  GLenum getElementType() const;
+  GLsizei getElementCount() const;
         
-        uint32_t key_;
-        GLuint vao_name_;
-        GLuint buffers_[COUNT];
-        GLenum element_type_;
-        GLsizei element_count_;
-        Material *material_;
-    };
+  GLfloat *getModelView();
+  void setRotation(GLfloat degrees);
+  void setAxis(Vec3 axis);
+  void setLocation(Vec3 location);
+        
+        
+ private:
+  Mesh();
+        
+  uint32_t key_;
+  GLuint vao_name_;
+  GLuint buffers_[COUNT];
+  GLenum element_type_;
+  GLsizei element_count_;
+  Material *material_;
+        
+  GLfloat modelView_[16];
+  GLfloat degrees_;
+  GLfloat axis_[3];
+  GLfloat location_[3];
+};
 }
 
 #endif /* defined(__Renderer__Mesh__) */

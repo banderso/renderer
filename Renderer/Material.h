@@ -1,3 +1,4 @@
+// -*- mode: C++; -*-
 //
 //  Material.h
 //  Renderer
@@ -12,20 +13,20 @@
 #include "Shader.h"
 
 namespace BAR {
-    class Material {
-    public:
-        Material(uint32_t key, const Shader *shader);
-        ~Material();
+class Material {
+ public:
+  Material(uint32_t key, const Shader *shader);
+  ~Material();
         
-        void use() const;
-        void bindUniform(const char *name, GLfloat *data) const;
+  void use() const;
+  void bindUniform(const char *name, GLfloat *data) const;
         
-    private:
-        Material();
+ private:
+  Material();
         
-        uint32_t key_;
-        const Shader *shader_;
-    };
+  uint32_t key_;
+  const Shader *shader_;
+};
 }
 
 #endif /* defined(__Renderer__Material__) */

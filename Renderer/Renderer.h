@@ -1,3 +1,4 @@
+// -*- mode: C++; -*-
 //
 //  Renderer.h
 //  Renderer
@@ -16,48 +17,49 @@
 
 namespace BAR {
     
-    struct RenderableContext {
-        //
-        MeshAttribute *vertices;
-        MeshAttribute *normals;
-        //MesshAttribure *textCoords;
-        MeshAttribute *elements;
-        //
-        //char *textureFilename;
-        // Full path
-        Shader *shader;
-    };
+struct RenderableContext {
+  //
+  MeshAttribute *vertices;
+  MeshAttribute *normals;
+  //MesshAttribure *textCoords;
+  MeshAttribute *elements;
+  //
+  //char *textureFilename;
+  // Full path
+  Shader *shader;
+};
     
-    struct RendererContext {
-        float width;
-        float height;
-        uint32_t renderableContextCount;
-        RenderableContext *renderableContexts;
-    };
+struct RendererContext {
+  float width;
+  float height;
+  uint32_t renderableContextCount;
+  RenderableContext *renderableContexts;
+};
     
-    struct Renderable {
-        Mesh *mesh;
-    };
+struct Renderable {
+  Mesh *mesh;
+};
     
-    class Renderer {
-    public:
-        Renderer(RendererContext &context);
-        virtual ~Renderer();
-        void draw() const;
-        void resize(float width, float height);
-    private:
-        void clear() const;
-        void drawObjects() const;
+class Renderer {
+ public:
+  Renderer(RendererContext &context);
+  virtual ~Renderer();
+  void draw(float delta) const;
+  void resize(float width, float height);
+ private:
+  void clear() const;
+  void drawObjects(float delta) const;
         
-        void initializeRenderables(uint32_t count, const RenderableContext *contexts);
+  void initializeRenderables(uint32_t count, const RenderableContext *contexts);
         
-        void clearRenderables();
+  void clearRenderables();
         
-        uint32_t renderableCount;
-        Renderable *renderables;
-        GLfloat viewWidth;
-        GLfloat viewHeight;
-    };
-}
+  uint32_t renderableCount;
+  Renderable *renderables;
+  GLfloat viewWidth;
+  GLfloat viewHeight;
+};
+
+} // namespace BAR
 
 #endif /* defined(__Renderer__Renderer__) */

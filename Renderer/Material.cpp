@@ -9,23 +9,23 @@
 #include "Material.h"
 
 BAR::Material::Material()
-: key_(0)
-, shader_(nullptr) {}
+    : key_(0)
+    , shader_(nullptr) {}
 
 BAR::Material::Material(uint32_t key, const Shader *shader)
-: key_(key)
-, shader_(shader) {}
+    : key_(key)
+    , shader_(shader) {}
 
 BAR::Material::~Material() {
-    delete shader_;
+  delete shader_;
 }
 
 void BAR::Material::use() const {
-    this->shader_->activate();
+  this->shader_->activate();
 }
 
 void BAR::Material::bindUniform(const char *name, GLfloat *data) const {
-    glUniformMatrix4fv(shader_->getUniformLocation(name), 1, GL_FALSE, data);
+  glUniformMatrix4fv(shader_->getUniformLocation(name), 1, GL_FALSE, data);
 }
 
 

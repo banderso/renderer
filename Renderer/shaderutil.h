@@ -1,3 +1,4 @@
+// -*- mode: C++; -*-
 //
 //  shaderutil.h
 //  Renderer
@@ -13,15 +14,15 @@
 
 namespace BAR {
 
-    GLchar * GetShaderCompileStatus(GLuint shader);
-    GLuint CreateShader(GLenum shaderType, const char *filename);
-    void DeleteShader(GLuint shader);
+GLchar * GetShaderCompileStatus(GLuint shader);
+GLuint CreateShader(GLenum shaderType, const char *filename);
+void DeleteShader(GLuint shader);
     
-    GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader);
-    void DeleteProgram(GLuint program);
+GLuint CreateProgram(GLuint vertexShader, GLuint fragmentShader);
+void DeleteProgram(GLuint program);
     
-    void PrintProgramAttributes(GLuint program);
-    void PrintProgramUniforms(GLuint program);
+void PrintProgramAttributes(GLuint program);
+void PrintProgramUniforms(GLuint program);
 }
 
 
