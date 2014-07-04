@@ -1,3 +1,4 @@
+// -*- mode: C++; -*-
 //
 //  fileutil.h
 //  Renderer
@@ -9,10 +10,10 @@
 #ifndef Renderer_fileutil_h
 #define Renderer_fileutil_h
 
-namespace BAR {
+namespace bar {
     
 char * ReadFile(const char * filename);
     
-}
+} // namespace bar
 
 #endif

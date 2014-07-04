@@ -12,7 +12,8 @@
 
 #include <OpenGL/gl3.h>
 
-namespace BAR {
+namespace bar {
+
 class Shader {
  public:
   Shader(const char *vertexShaderFilename,
@@ -36,6 +37,7 @@ class Shader {
         
   GLuint program;
 };
-}
+
+} // namespace bar
 
 #endif /* defined(__Renderer__Shader__) */

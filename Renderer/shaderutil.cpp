@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-GLchar *BAR::GetShaderCompileStatus(GLuint shader) {
+GLchar *bar::GetShaderCompileStatus(GLuint shader) {
   GLint compileStatus = GL_TRUE;
   GLint logLength = 0;
   GLchar *buffer = nullptr;
@@ -28,17 +28,17 @@ GLchar *BAR::GetShaderCompileStatus(GLuint shader) {
   return buffer;
 }
 
-GLuint BAR::CreateShader(GLenum shaderType, const char *filename) {
+GLuint bar::CreateShader(GLenum shaderType, const char *filename) {
   GLchar *infoBuffer = nullptr;
   GLuint shader = 0;
-  const char * shaderSrc = BAR::ReadFile(filename);
+  const char * shaderSrc = bar::ReadFile(filename);
   if (shaderSrc == nullptr) return shader;
     
   shader = glCreateShader(shaderType);
   glShaderSource(shader, 1, &shaderSrc, nullptr);
   glCompileShader(shader);
     
-  infoBuffer = BAR::GetShaderCompileStatus(shader);
+  infoBuffer = bar::GetShaderCompileStatus(shader);
   if (infoBuffer != nullptr) {
     fprintf(stderr, "Shader compile error: %s\n", infoBuffer);
     delete[] infoBuffer;
@@ -49,13 +49,13 @@ GLuint BAR::CreateShader(GLenum shaderType, const char *filename) {
   return shader;
 }
 
-void BAR::DeleteShader(GLuint shader) {
+void bar::DeleteShader(GLuint shader) {
   if (shader) {
     glDeleteShader(shader);
   }
 }
 
-GLuint BAR::CreateProgram(GLuint vertexShader, GLuint fragmentShader) {
+GLuint bar::CreateProgram(GLuint vertexShader, GLuint fragmentShader) {
   GLuint program = 0;
   if (vertexShader != 0 && fragmentShader != 0) {
     program = glCreateProgram();
@@ -72,13 +72,13 @@ GLuint BAR::CreateProgram(GLuint vertexShader, GLuint fragmentShader) {
   return program;
 }
 
-void BAR::DeleteProgram(GLuint program) {
+void bar::DeleteProgram(GLuint program) {
   if (program) {
     glDeleteProgram(program);
   }
 }
 
-void BAR::PrintProgramAttributes(GLuint program) {
+void bar::PrintProgramAttributes(GLuint program) {
   GLint count = 0;
   glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &count);
   if (count == 0) return; // no active attributes
@@ -102,7 +102,7 @@ void BAR::PrintProgramAttributes(GLuint program) {
   fprintf(stdout, "\n");
 }
 
-void BAR::PrintProgramUniforms(GLuint program) {
+void bar::PrintProgramUniforms(GLuint program) {
   GLint count = 0;
   glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &count);
   if (count == 0) return; // no active uniforms

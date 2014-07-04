@@ -10,7 +10,7 @@
 #include "Renderer.h"
 #include "matrix.h"
 
-BAR::Renderer::Renderer(RendererContext &context) {
+bar::Renderer::Renderer(RendererContext &context) {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClearDepth(1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -24,28 +24,28 @@ BAR::Renderer::Renderer(RendererContext &context) {
   }
 }
 
-BAR::Renderer::~Renderer() {
+bar::Renderer::~Renderer() {
   this->clearRenderables();
 }
 
-void BAR::Renderer::resize(float width, float height) {
+void bar::Renderer::resize(float width, float height) {
   this->viewWidth = width;
   this->viewHeight = height;
 }
 
-void BAR::Renderer::draw(float delta) const {
+void bar::Renderer::draw(float delta) const {
   this->clear();
   this->drawObjects(delta);
 }
 
-void BAR::Renderer::clear() const {
+void bar::Renderer::clear() const {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0,
              static_cast<GLsizei>(viewWidth),
              static_cast<GLsizei>(viewHeight));
 }
 
-void BAR::Renderer::drawObjects(float delta) const {
+void bar::Renderer::drawObjects(float delta) const {
   //GLfloat modelView[16];
   GLfloat projection[16];
     
@@ -73,7 +73,7 @@ void BAR::Renderer::drawObjects(float delta) const {
   glFlush();
 }
 
-void BAR::Renderer::initializeRenderables(uint32_t count,
+void bar::Renderer::initializeRenderables(uint32_t count,
                                           const RenderableContext *contexts) {
   Renderable * const renderables = new Renderable[count];
   for (uint32_t i = 0; i < count; i++) {
@@ -88,8 +88,8 @@ void BAR::Renderer::initializeRenderables(uint32_t count,
                                new Material(i, context.shader));
   }
     
-  BAR::Vec3 location;
-  BAR::Vec3 axis = {0.0f, 1.0f, 0.0f};
+  bar::Vec3 location;
+  bar::Vec3 axis = {0.0f, 1.0f, 0.0f};
     
   location.x = -1.5f;
   location.y = 0.0f;
@@ -107,7 +107,7 @@ void BAR::Renderer::initializeRenderables(uint32_t count,
   this->renderableCount = count;
 }
 
-void BAR::Renderer::clearRenderables() {
+void bar::Renderer::clearRenderables() {
   Renderable * renderables = this->renderables;
     
   delete[] renderables;

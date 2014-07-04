@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 
-BAR::Mesh::Mesh()
+bar::Mesh::Mesh()
     : key_(0)
     , vao_name_(0)
     , element_type_(0)
@@ -21,7 +21,7 @@ BAR::Mesh::Mesh()
     , material_(nullptr)
     , degrees_(0.0f) {}
 
-BAR::Mesh::Mesh(uint32_t key,
+bar::Mesh::Mesh(uint32_t key,
                 MeshAttribute *positions,
                 MeshAttribute *normals,
                 MeshAttribute *texcoords,
@@ -108,49 +108,49 @@ BAR::Mesh::Mesh(uint32_t key,
   location_[0] = location_[1] = location_[2] = 0.0f;
 }
 
-BAR::Mesh::~Mesh() {
+bar::Mesh::~Mesh() {
   glDeleteBuffers(BufferType::COUNT, buffers_);
   delete material_;
 }
 
-void BAR::Mesh::update(float delta) {
+void bar::Mesh::update(float delta) {
   const float speed = 0.00001f;
   degrees_ += (speed * delta);
 }
 
-void BAR::Mesh::activate() const {
+void bar::Mesh::activate() const {
   glBindVertexArray(vao_name_);
   material_->use();
 }
 
-void BAR::Mesh::bindProjection(GLfloat *projection) const {
+void bar::Mesh::bindProjection(GLfloat *projection) const {
   if (material_) {
     material_->bindUniform("projection", projection);
   }
 }
 
-void BAR::Mesh::bindModelView() {
+void bar::Mesh::bindModelView() {
   if (material_) {
     material_->bindUniform("modelView", getModelView());
   }
 }
 
 /*
-  void BAR::Mesh::bindModelView(GLfloat *modelView) const {
+  void bar::Mesh::bindModelView(GLfloat *modelView) const {
   if (material_) {
   material_->bindUniform("modelView", modelView);
   }
   }
 */
-GLenum BAR::Mesh::getElementType() const {
+GLenum bar::Mesh::getElementType() const {
   return element_type_;
 }
 
-GLsizei BAR::Mesh::getElementCount() const {
+GLsizei bar::Mesh::getElementCount() const {
   return element_count_;
 }
 
-GLfloat *BAR::Mesh::getModelView() {
+GLfloat *bar::Mesh::getModelView() {
   GLfloat rotation[16];
   GLfloat brotation[16];
   GLfloat translation[16];
@@ -171,17 +171,17 @@ GLfloat *BAR::Mesh::getModelView() {
   return modelView_;
 }
 
-void BAR::Mesh::setRotation(GLfloat degrees) {
+void bar::Mesh::setRotation(GLfloat degrees) {
   degrees_ = degrees;
 }
 
-void BAR::Mesh::setAxis(Vec3 axis) {
+void bar::Mesh::setAxis(Vec3 axis) {
   axis_[0] = axis.x;
   axis_[1] = axis.y;
   axis_[2] = axis.z;
 }
 
-void BAR::Mesh::setLocation(Vec3 location) {
+void bar::Mesh::setLocation(Vec3 location) {
   location_[0] = location.x;
   location_[1] = location.y;
   location_[2] = location.z;

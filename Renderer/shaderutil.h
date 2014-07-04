@@ -12,7 +12,7 @@
 
 #include <OpenGL/gl3.h>
 
-namespace BAR {
+namespace bar {
 
 GLchar * GetShaderCompileStatus(GLuint shader);
 GLuint CreateShader(GLenum shaderType, const char *filename);
@@ -23,7 +23,8 @@ void DeleteProgram(GLuint program);
     
 void PrintProgramAttributes(GLuint program);
 void PrintProgramUniforms(GLuint program);
-}
+
+} // namespace bar
 
 
 #endif

@@ -12,7 +12,8 @@
 
 #include "Shader.h"
 
-namespace BAR {
+namespace bar {
+
 class Material {
  public:
   Material(uint32_t key, const Shader *shader);
@@ -27,6 +28,7 @@ class Material {
   uint32_t key_;
   const Shader *shader_;
 };
-}
+
+} // namespace bar
 
 #endif /* defined(__Renderer__Material__) */

@@ -15,7 +15,7 @@
 #include "Shader.h"
 #include "Mesh.h"
 
-namespace BAR {
+namespace bar {
     
 struct RenderableContext {
   //
@@ -60,6 +60,6 @@ class Renderer {
   GLfloat viewHeight;
 };
 
-} // namespace BAR
+} // namespace bar
 
 #endif /* defined(__Renderer__Renderer__) */

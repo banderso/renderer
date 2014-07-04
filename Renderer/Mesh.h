@@ -14,7 +14,7 @@
 
 #include "Material.h"
 
-namespace BAR {
+namespace bar {
 enum BufferType {
   VERTEX = 0,
   NORMAL,
@@ -88,6 +88,7 @@ class Mesh {
   GLfloat axis_[3];
   GLfloat location_[3];
 };
-}
+
+} // namespace bar
 
 #endif /* defined(__Renderer__Mesh__) */

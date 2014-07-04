@@ -12,11 +12,11 @@
 
 #include <stdio.h>
 
-BAR::Shader::Shader()
+bar::Shader::Shader()
     : vertexShaderFilename(nullptr)
     , fragmentShaderFilename(nullptr) {}
 
-BAR::Shader::Shader(const char *vertexShaderFilename,
+bar::Shader::Shader(const char *vertexShaderFilename,
                     const char *fragmentShaderFilename)
     : vertexShaderFilename(vertexShaderFilename)
     , fragmentShaderFilename(fragmentShaderFilename)
@@ -26,27 +26,27 @@ BAR::Shader::Shader(const char *vertexShaderFilename,
   if (this->vertexShaderFilename == nullptr ||
       this->fragmentShaderFilename == nullptr) return;
     
-  this->vertexShader = BAR::CreateShader(GL_VERTEX_SHADER,
+  this->vertexShader = bar::CreateShader(GL_VERTEX_SHADER,
                                          this->vertexShaderFilename);
-  this->fragmentShader = BAR::CreateShader(GL_FRAGMENT_SHADER,
+  this->fragmentShader = bar::CreateShader(GL_FRAGMENT_SHADER,
                                            this->fragmentShaderFilename);
-  this->program = BAR::CreateProgram(this->vertexShader, this->fragmentShader);
+  this->program = bar::CreateProgram(this->vertexShader, this->fragmentShader);
     
 }
 
-BAR::Shader::~Shader() {
+bar::Shader::~Shader() {
   if (this->vertexShaderFilename == nullptr ||
       this->fragmentShaderFilename == nullptr) return;
     
-  BAR::DeleteShader(this->vertexShader);
-  BAR::DeleteShader(this->fragmentShader);
-  BAR::DeleteProgram(this->program);
+  bar::DeleteShader(this->vertexShader);
+  bar::DeleteShader(this->fragmentShader);
+  bar::DeleteProgram(this->program);
     
   delete [] this->vertexShaderFilename;
   delete [] this->fragmentShaderFilename;
 }
 
-GLint BAR::Shader::getUniformLocation(const char *uniformName) const {
+GLint bar::Shader::getUniformLocation(const char *uniformName) const {
   if (this->program) {
     return glGetUniformLocation(this->program, uniformName);
   } else {
@@ -54,15 +54,15 @@ GLint BAR::Shader::getUniformLocation(const char *uniformName) const {
   }
 }
 
-void BAR::Shader::activate() const {
+void bar::Shader::activate() const {
   glUseProgram(this->program);
 }
 
-void BAR::Shader::listAttributes() const {
-  BAR::PrintProgramAttributes(this->program);
+void bar::Shader::listAttributes() const {
+  bar::PrintProgramAttributes(this->program);
 }
 
-void BAR::Shader::listUniforms() const {
-  BAR::PrintProgramUniforms(this->program);
+void bar::Shader::listUniforms() const {
+  bar::PrintProgramUniforms(this->program);
 }
 
