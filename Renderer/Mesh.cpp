@@ -114,8 +114,9 @@ bar::Mesh::~Mesh() {
 }
 
 void bar::Mesh::update(float delta) {
-  const float speed = 0.00001f;
+  const float speed = 256.0f;
   degrees_ += (speed * delta);
+  //fprintf(stderr, "degrees: %f\n", degrees_);
 }
 
 void bar::Mesh::activate() const {
@@ -135,13 +136,6 @@ void bar::Mesh::bindModelView() {
   }
 }
 
-/*
-  void bar::Mesh::bindModelView(GLfloat *modelView) const {
-  if (material_) {
-  material_->bindUniform("modelView", modelView);
-  }
-  }
-*/
 GLenum bar::Mesh::getElementType() const {
   return element_type_;
 }
