@@ -88,18 +88,17 @@ void bar::Renderer::initializeRenderables(uint32_t count,
                                new Material(i, context.shader));
   }
     
-  bar::Vec3 location;
+  bar::Vec3 location = {-1.5f, 0.0f, -5.0f};
   bar::Vec3 axis = {0.0f, 1.0f, 0.0f};
     
-  location.x = -1.5f;
-  location.y = 0.0f;
-  location.z = -5.0f;
   renderables[0].mesh->setLocation(location);
   renderables[0].mesh->setAxis(axis);
   //renderables[0].mesh->setRotation(45.0f);
     
   location.x = 1.5f;
   renderables[1].mesh->setLocation(location);
+
+  axis.y = -axis.y;
   renderables[1].mesh->setAxis(axis);
   //renderables[1].mesh->setRotation(-45.0f);
     
