@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Benjamin Anderson. All rights reserved.
 //
 
-#include "MeshSystem.cpp"
+#include "MeshSystem.h"
+#include "glutil.h"
 
 bar::MeshSystem::MeshSystem() {
   vao_buffers_.vertices  = nullptr;
@@ -47,15 +48,15 @@ void bar::MeshSystem::load_buffers(GLuint vao_name,
 
   glBindVertexArray(vao_name);
 
-  GLenum element_type;
-  GLsizei element_count;
+  GLenum element_type = 0;
+  GLsizei element_count = 0;
   GLuint buffers[BufferType::COUNT];
   glGenBuffers(BufferType::COUNT, buffers);
   
   for (uint8_t i = 0; i < attribute_count; i++) {
-    const MeshAttribute *attribute = attributes[i];
-    const BufferType type = attribute->type;
-    const GLSizei type_size = GetGLTypeSize(attribute->data_type);
+    const MeshAttribute &attribute = attributes[i];
+    const BufferType type = attribute.type;
+    const GLsizei type_size = GetGLTypeSize(attribute.data_type);
     
     switch (type) {
       case BufferType::VERTEX:
@@ -63,14 +64,14 @@ void bar::MeshSystem::load_buffers(GLuint vao_name,
       case BufferType::TEXTURE:
         glBindBuffer(GL_ARRAY_BUFFER, buffers[type]);
         glBufferData(GL_ARRAY_BUFFER,
-                     attribute->data_array_size,
-                     attribute->data,
+                     attribute.data_array_size,
+                     attribute.data,
                      GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(type);
         glVertexAttribPointer(type,
-                              attribute->data_size,
-                              attribute->data_type,
+                              attribute.data_size,
+                              attribute.data_type,
                               GL_FALSE,
                               0,
                               0);
@@ -78,12 +79,12 @@ void bar::MeshSystem::load_buffers(GLuint vao_name,
       case BufferType::ELEMENT:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[type]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     attribute->data_array_size,
-                     attribute->data,
+                     attribute.data_array_size,
+                     attribute.data,
                      GL_STATIC_DRAW);
 
-        element_type = attribute->data_type;
-        element_count = attribute->data_array_size / type_size;
+        element_type = attribute.data_type;
+        element_count = attribute.data_array_size / type_size;
         break;
       default:
         break;
@@ -123,12 +124,12 @@ void bar::MeshSystem::unload_buffers(uint32_t name_count, GLuint *vao_names) {
 }
 
 void bar::MeshSystem::render_elements(uint32_t name_count, GLuint *vao_names) const {
-  if (name_count == 0 || vao_names == nulltpr) {
+  if (name_count == 0 || vao_names == nullptr) {
     return;
   }
 
-  GLenum *types = vao_buffers.element_types;
-  GLsizei *counts = vao_buffers.element_counts;
+  GLenum *types = vao_buffers_.element_types;
+  GLsizei *counts = vao_buffers_.element_counts;
 
   GLuint name = 0;
   for (uint32_t i = 0; i < name_count; i++) {
