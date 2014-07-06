@@ -75,6 +75,7 @@ bar::Mesh::Mesh(uint32_t key,
   }
     
   if (texcoords) {
+    fprintf(stdout, "Binding Texture buffer\n");
     glBindBuffer(GL_ARRAY_BUFFER, buffers_[BufferType::TEXTURE]);
     glBufferData(GL_ARRAY_BUFFER,
                  texcoords->data_array_size,
@@ -106,6 +107,13 @@ bar::Mesh::Mesh(uint32_t key,
   axis_[1] = 1.0f;
     
   location_[0] = location_[1] = location_[2] = 0.0f;
+
+  fprintf(stdout,
+          "Mesh Buffers: Vertex: %d, Normal: %d, Texture: %d, Element: %d\n",
+          buffers_[BufferType::VERTEX],
+          buffers_[BufferType::NORMAL],
+          buffers_[BufferType::TEXTURE],
+          buffers_[BufferType::ELEMENT]);
 }
 
 bar::Mesh::~Mesh() {
