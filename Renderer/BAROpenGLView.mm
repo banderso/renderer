@@ -277,18 +277,18 @@ int loop_counter = 0;
 - (CVReturn)getFrameForTime:(const CVTimeStamp *)outputTime
 {
   float delta = static_cast<float>(outputTime->videoRefreshPeriod) /
-  static_cast<float>(outputTime->videoTimeScale);
+                static_cast<float>(outputTime->videoTimeScale);
   
   float frameTimeDiff = kDesiredFrameTime - delta - lastDelta;
   lastDelta += delta;
   
-  // NSLog(@"%d: vt: %lld, delta: %f, lastDelta: %f, timeToRender: %f, adjusted: %f",
-  //       loop_counter,
-  //       outputTime->videoTime,
-  //       delta,
-  //       lastDelta,
-  //       frameTimeDiff,
-  //       lastDelta + frameTimeDiff);
+//   NSLog(@"%d: vt: %lld, delta: %f, lastDelta: %f, timeToRender: %f, adjusted: %f",
+//         loop_counter,
+//         outputTime->videoTime,
+//         delta,
+//         lastDelta,
+//         frameTimeDiff,
+//         lastDelta + frameTimeDiff);
   
   if (frameTimeDiff >= 0.000001f) {
     loop_counter++;
