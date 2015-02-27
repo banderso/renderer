@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D89D8941AA0DC5B00407EC0 /* MeshSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */; };
 		2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */; };
 		2F1B69C01957FCEC005D6C83 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */; };
 		2F1B69C5195A57A5005D6C83 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69C4195A57A5005D6C83 /* vector.c */; };
@@ -46,6 +47,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D89D8911AA0DC5B00407EC0 /* MaterialSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterialSystem.h; sourceTree = "<group>"; };
+		2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshSystem.cpp; sourceTree = "<group>"; };
+		2D89D8931AA0DC5B00407EC0 /* MeshSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshSystem.h; sourceTree = "<group>"; };
 		2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BAROpenGLView.mm; sourceTree = "<group>"; };
 		2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		2F1B69C4195A57A5005D6C83 /* vector.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vector.c; sourceTree = "<group>"; };
@@ -115,6 +119,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D89D8951AA0E4F900407EC0 /* Systems */ = {
+			isa = PBXGroup;
+			children = (
+				2D89D8911AA0DC5B00407EC0 /* MaterialSystem.h */,
+				2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */,
+				2D89D8931AA0DC5B00407EC0 /* MeshSystem.h */,
+			);
+			name = Systems;
+			sourceTree = "<group>";
+		};
 		2F1B69CA195A610C005D6C83 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +229,7 @@
 		2FF83B0219575F2600A1682E /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				2D89D8951AA0E4F900407EC0 /* Systems */,
 				2FF83B0319575F4300A1682E /* Renderer.cpp */,
 				2FF83B0419575F4300A1682E /* Renderer.h */,
 				2FFA795B1960D53600A55D48 /* Mesh.cpp */,
@@ -349,6 +364,7 @@
 				2F1B69C8195A5840005D6C83 /* matrix.c in Sources */,
 				2FFA794E195F983300A55D48 /* glutil.c in Sources */,
 				2FF83AD6195751DC00A1682E /* main.m in Sources */,
+				2D89D8941AA0DC5B00407EC0 /* MeshSystem.cpp in Sources */,
 				2F1B69C5195A57A5005D6C83 /* vector.c in Sources */,
 				2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */,
 			);
