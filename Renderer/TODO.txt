@@ -5,7 +5,7 @@ so that model-view matrices can be stored logically. Additionally object data,
 the above mentioned mesh values, needs to be read in through files instead of 
 hard coded in the source. Research OBJ files or using JSON as the file format.
 
-The objet structure should follow the compnent-entity system where an entity is
+The objet structure should follow the component-entity system where an entity is
 an ephemeral object, usually just an id, that is attached to components. Right now
 things feel as though they shouldn't be too much work to be massaged into the 
 desired structure.
