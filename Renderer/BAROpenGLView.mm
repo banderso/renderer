@@ -46,7 +46,8 @@ float lastDelta = 0.0f;
 
 - (void)awakeFromNib
 {
-  NSLog(@"awakeFromNib: called");
+  //    NSLog(@"awakeFromNib: called");
+  [super awakeFromNib];
   [self initGLContext];
 }
 
@@ -71,20 +72,20 @@ float lastDelta = 0.0f;
   NSLog(@"OpenGL version: %s", glGetString(GL_VERSION));
   NSLog(@"OpenGL Shading Language version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
   NSLog(@"Desired frame time: %f", kDesiredFrameTime);
-    
+  
   [super prepareOpenGL];
-    
+  
   [self initGL];
-    
+  
   CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
   CVDisplayLinkSetOutputCallback(displayLink, &displayLinkCallback, (__bridge void *)self);
   
   CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
   CGLPixelFormatObj cglPixelFormat = (CGLPixelFormatObj)[[self pixelFormat] CGLPixelFormatObj];
   CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
-    
+  
   CVDisplayLinkStart(displayLink);
-    
+  
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(windowWillClose:)
                                                name:NSWindowWillCloseNotification
@@ -99,16 +100,18 @@ float lastDelta = 0.0f;
 - (void)reshape
 {
   [super reshape];
-    
+  
+  if (renderer == nullptr) return;
+  
   CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
   CGLLockContext(cglContext);
-    
+  
   NSRect viewRectPoints = [self bounds];
   NSRect viewRectPixels = [self convertRectToBacking:viewRectPoints];
-    
+  
   renderer->resize(viewRectPixels.size.width,
                    viewRectPixels.size.height);
-    
+  
   CGLUnlockContext(cglContext);
 }
 
@@ -127,70 +130,70 @@ float lastDelta = 0.0f;
   NSOpenGLPixelFormatAttribute attrs[] = {
     NSOpenGLPFADoubleBuffer,
     NSOpenGLPFADepthSize, 24,
-        
+    
     NSOpenGLPFAOpenGLProfile,
-    NSOpenGLProfileVersion3_2Core,
-        
+    NSOpenGLProfileVersion4_1Core,
+    
     0
   };
-    
+  
   NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:attrs];
   if (!pf) {
     NSLog(@"No OpenGL pixel format");
   }
-    
+  
   NSOpenGLContext *context = [[NSOpenGLContext alloc] initWithFormat:pf
                                                         shareContext:nil];
   CGLEnable((CGLContextObj)[context CGLContextObj], kCGLCECrashOnRemovedFunctions);
-    
+  
   [self setPixelFormat:pf];
   [self setOpenGLContext:context];
-    
+  
   [self setWantsBestResolutionOpenGLSurface:YES];
 }
 
 - (void)initGL
 {
   [[self openGLContext] makeCurrentContext];
-    
+  
   GLint swapInt = 1;
   [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
-    
+  
   NSRect viewRectPoints = [self bounds];
   NSRect viewRectPixels = [self convertRectToBacking:viewRectPoints];
-    
+  
   const char *basePath = [[[NSBundle mainBundle] resourcePath] UTF8String];
-    
+  
   bar::Shader *shader;
   shader = new bar::Shader(concat(basePath, "/default.vert.glsl"),
                            concat(basePath, "/default.frag.glsl"));
-    
+  
   /*GLfloat vertices[] = {
-    -1.0f,  1.0f, 0.0f,
-    1.0f,  1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,
-    -1.0f, -1.0f, 0.0f
-    };*/
-    
+   -1.0f,  1.0f, 0.0f,
+   1.0f,  1.0f, 0.0f,
+   1.0f, -1.0f, 0.0f,
+   -1.0f, -1.0f, 0.0f
+   };*/
+  
   GLfloat vertices[] = {
     -1.0f,  1.0f,  1.0f, // 0
     -1.0f,  1.0f, -1.0f, // 1
     1.0f,  1.0f, -1.0f, // 2
     1.0f,  1.0f,  1.0f, // 3
-        
+    
     -1.0f, -1.0f,  1.0f, // 4
     -1.0f, -1.0f, -1.0f, // 5
     1.0f, -1.0f, -1.0f, // 6
     1.0f, -1.0f,  1.0f, // 7
   };
-    
+  
   GLfloat normal_vals[] = {
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f
   };
-
+  
   GLuint element_vals[] = {
     0, 1, 2,  0, 2, 3, // top
     0, 3, 4,  4, 3, 7, // front
@@ -199,14 +202,14 @@ float lastDelta = 0.0f;
     6, 2, 5,  5, 2, 1, // back
     1, 4, 0,  1, 5, 4 // left
   };
-    
+  
   bar::MeshAttribute positions = {
     static_cast<GLvoid *>(vertices),
     GL_FLOAT,
     3,
     sizeof(vertices)
   };
-    
+  
   bar::MeshAttribute normals = {
     static_cast<GLvoid *>(normal_vals),
     GL_FLOAT,
@@ -219,7 +222,7 @@ float lastDelta = 0.0f;
     1,
     sizeof(element_vals)
   };
-    
+  
   bar::RenderableContext renderable[] = {
     {
       &positions,
@@ -234,13 +237,13 @@ float lastDelta = 0.0f;
       shader
     }
   };
-    
+  
   bar::RendererContext context;
   context.width = viewRectPixels.size.width;
   context.height = viewRectPixels.size.height;
   context.renderableContextCount = 2;
   context.renderableContexts = renderable;
-    
+  
   renderer = new bar::Renderer(context);
 }
 
@@ -248,19 +251,19 @@ float lastDelta = 0.0f;
 {
   CVDisplayLinkStop(displayLink);
   CVDisplayLinkRelease(displayLink);
-    
+  
   delete renderer;
 }
 
 - (void)drawView:(float)delta
 {
   [[self openGLContext] makeCurrentContext];
-    
+  
   CGLContextObj cglContext = (CGLContextObj)[[self openGLContext] CGLContextObj];
   CGLLockContext(cglContext);
-    
+  
   renderer->draw(delta);
-    
+  
   CGLFlushDrawable(cglContext);
   CGLUnlockContext(cglContext);
 }
@@ -269,11 +272,11 @@ int loop_counter = 0;
 - (CVReturn)getFrameForTime:(const CVTimeStamp *)outputTime
 {
   float delta = static_cast<float>(outputTime->videoRefreshPeriod) /
-      static_cast<float>(outputTime->videoTimeScale);
+  static_cast<float>(outputTime->videoTimeScale);
   
   float frameTimeDiff = kDesiredFrameTime - delta - lastDelta;
   lastDelta += delta;
-
+  
   // NSLog(@"%d: vt: %lld, delta: %f, lastDelta: %f, timeToRender: %f, adjusted: %f",
   //       loop_counter,
   //       outputTime->videoTime,
@@ -287,11 +290,11 @@ int loop_counter = 0;
     return kCVReturnSuccess;
   }
   loop_counter = 0;
-
+  
   //NSLog(@"Render");
   [self drawView:lastDelta + frameTimeDiff];
   lastDelta = frameTimeDiff;
-    
+  
   return kCVReturnSuccess;
 }
 
@@ -299,15 +302,15 @@ int loop_counter = 0;
 
 static char * concat(const char *base, const char *str) {
   if (base == nullptr || str == nullptr) return nullptr;
-    
+  
   size_t baseLength = strlen(base);
   size_t strLength = strlen(str);
-    
+  
   char * nstr = new char[baseLength + strLength + 1];
-    
+  
   strncpy(nstr, base, baseLength + 1);
   strncat(nstr, str, strLength);
-    
+  
   return nstr;
 }
 
