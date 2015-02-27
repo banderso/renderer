@@ -60,6 +60,7 @@ class Mesh {
   void update(float delta);
         
   void activate() const;
+  void bind(const char *name, GLfloat data) const;
   void bindProjection(GLfloat *projection) const;
   void bindModelView();
   //void bindModelView(GLfloat *modelView) const;
@@ -85,6 +86,7 @@ class Mesh {
         
   GLfloat modelView_[16];
   GLfloat degrees_;
+  GLfloat time_;
   GLfloat axis_[3];
   GLfloat location_[3];
 };
