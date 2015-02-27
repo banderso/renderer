@@ -19,7 +19,8 @@ bar::Mesh::Mesh()
     , element_type_(0)
     , element_count_(0)
     , material_(nullptr)
-    , degrees_(0.0f) {}
+    , degrees_(0.0f)
+    , time_(0.0f) {}
 
 bar::Mesh::Mesh(uint32_t key,
                 MeshAttribute *positions,
@@ -32,7 +33,8 @@ bar::Mesh::Mesh(uint32_t key,
     , element_type_(0)
     , element_count_(0)
     , material_(material)
-    , degrees_(0.0f){
+    , degrees_(0.0f)
+    , time_(0.0f) {
   glGenVertexArrays(1, &vao_name_);
   glBindVertexArray(vao_name_);
     
@@ -123,13 +125,24 @@ bar::Mesh::~Mesh() {
 
 void bar::Mesh::update(float delta) {
   const float speed = 256.0f;
-  degrees_ += (speed * delta);
+  
+  //location_[2] = -0.001f;
+  
+  //degrees_ += (speed * delta);
+  time_ += delta;
+  bind("delta", time_);
   //fprintf(stderr, "degrees: %f\n", degrees_);
 }
 
 void bar::Mesh::activate() const {
   glBindVertexArray(vao_name_);
   material_->use();
+}
+
+void bar::Mesh::bind(const char *name, GLfloat data) const {
+  if (material_) {
+    material_->bindUniform(name, data);
+  }
 }
 
 void bar::Mesh::bindProjection(GLfloat *projection) const {
@@ -169,7 +182,7 @@ GLfloat *bar::Mesh::getModelView() {
   mtxLoadTranslate(translation, location_[0], location_[1], location_[2]);
     
   mtxMultiply(temp, rotation, brotation);
-  mtxMultiply(modelView_, translation, temp);
+  mtxMultiply(modelView_, temp, translation);
   return modelView_;
 }
 
