@@ -131,8 +131,13 @@ float lastDelta = 0.0f;
     NSOpenGLPFADoubleBuffer,
     NSOpenGLPFADepthSize, 24,
     
-    NSOpenGLPFAOpenGLProfile,
-    NSOpenGLProfileVersion4_1Core,
+    NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion4_1Core,
+    
+    NSOpenGLPFAMultisample,
+    NSOpenGLPFASampleBuffers, 1,
+    NSOpenGLPFASamples, 8,
+    
+    NSOpenGLPFANoRecovery,
     
     0
   };
@@ -195,12 +200,12 @@ float lastDelta = 0.0f;
   };
   
   GLuint element_vals[] = {
-    0, 1, 2,  0, 2, 3, // top
+//    0, 1, 2,  0, 2, 3, // top
     0, 3, 4,  4, 3, 7, // front
-    7, 3, 6,  6, 3, 2, // right
-    6, 7, 5,  5, 7, 4, // bottom
-    6, 2, 5,  5, 2, 1, // back
-    1, 4, 0,  1, 5, 4 // left
+//    7, 3, 6,  6, 3, 2, // right
+//    6, 7, 5,  5, 7, 4, // bottom
+//    6, 2, 5,  5, 2, 1, // back
+//    1, 4, 0,  1, 5, 4 // left
   };
   
   bar::MeshAttribute positions = {
@@ -224,12 +229,12 @@ float lastDelta = 0.0f;
   };
   
   bar::RenderableContext renderable[] = {
-    {
-      &positions,
-      &normals,
-      &elements,
-      shader
-    },
+//    {
+//      &positions,
+//      &normals,
+//      &elements,
+//      shader
+//    },
     {
       &positions,
       &normals,
@@ -241,7 +246,7 @@ float lastDelta = 0.0f;
   bar::RendererContext context;
   context.width = viewRectPixels.size.width;
   context.height = viewRectPixels.size.height;
-  context.renderableContextCount = 2;
+  context.renderableContextCount = 1;
   context.renderableContexts = renderable;
   
   renderer = new bar::Renderer(context);

@@ -14,6 +14,8 @@ bar::Renderer::Renderer(RendererContext &context) {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClearDepth(1.0f);
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_MULTISAMPLE);
+//  glEnable(GL_BLEND);
   glDepthFunc(GL_LEQUAL);
     
   this->viewWidth = context.width;
@@ -57,11 +59,11 @@ void bar::Renderer::drawObjects(float delta) const {
   for (uint32_t i = 0; i < count; i++) {
     const Renderable &renderable = renderables[i];
     Mesh *mesh = renderable.mesh;
+    mesh->activate();
     mesh->update(delta);
-        
+    
     glGetError();
 
-    mesh->activate();
     mesh->bindProjection(projection);
     mesh->bindModelView();
 
@@ -88,18 +90,19 @@ void bar::Renderer::initializeRenderables(uint32_t count,
                                new Material(i, context.shader));
   }
     
-  bar::Vec3 location = {-1.5f, 0.0f, -5.0f};
+  //bar::Vec3 location = {-1.5f, 0.0f, -5.0f};
+  bar::Vec3 location = {0.0f, 0.0f, -2.0f};
   bar::Vec3 axis = {0.0f, 1.0f, 0.0f};
     
   renderables[0].mesh->setLocation(location);
   renderables[0].mesh->setAxis(axis);
   //renderables[0].mesh->setRotation(45.0f);
     
-  location.x = 1.5f;
-  renderables[1].mesh->setLocation(location);
+  //location.x = 1.5f;
+  //renderables[1].mesh->setLocation(location);
 
-  axis.y = -axis.y;
-  renderables[1].mesh->setAxis(axis);
+  //axis.y = -axis.y;
+  //renderables[1].mesh->setAxis(axis);
   //renderables[1].mesh->setRotation(-45.0f);
     
   this->renderables = renderables;
