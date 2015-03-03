@@ -142,7 +142,7 @@ vec4 invert(vec4 color) {
 }
 
 void main() {
-  float n = abs(snoise(vec3(gl_FragCoord.xy * 0.009, varDelta * 0.5)));
+  float n = abs(snoise(vec3(gl_FragCoord.xy * 0.009, varDelta)));
   float r = 0.0;
   float g = 0.0;
   float b = 0.0;
@@ -165,7 +165,7 @@ void main() {
     b = 1.0;
   }
   
-  fragColor = invert(vec4(r, g, b, 1.0));
-//  fragColor = vec4(r, g, b, 1.0);
+//  fragColor = invert(vec4(r, g, b, 1.0));
+  fragColor = vec4(r, g, b, 1.0);
 //    fragColor = vec4(vec3(1.0, 0.85, 0.35), 1.0);
 }

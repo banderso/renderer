@@ -39,6 +39,14 @@ struct RendererContext {
 struct Renderable {
   Mesh *mesh;
 };
+  
+struct Framebuffer {
+  GLuint fbo;
+  GLuint colorBuffer;
+  GLuint depthStencilBuffer;
+  
+  Mesh *mesh;
+};
     
 class Renderer {
  public:
@@ -49,13 +57,25 @@ class Renderer {
  private:
   void clear() const;
   void drawObjects(float delta) const;
+  void activateFramebuffer() const;
+  void deactivateFramebuffer() const;
+  void drawFramebuffer() const;
         
   void initializeRenderables(uint32_t count, const RenderableContext *contexts);
+  void initializeFrambuffer();
+  void initializeTexture();
+  void initializeRenderBuffer();
         
   void clearRenderables();
+  void clearFramebuffer();
+  void clearTexture();
+  void clearRenderBuffer();
         
   uint32_t renderableCount;
   Renderable *renderables;
+  
+  Framebuffer buffer;
+  
   GLfloat viewWidth;
   GLfloat viewHeight;
 };

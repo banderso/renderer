@@ -124,11 +124,11 @@ bar::Mesh::~Mesh() {
 }
 
 void bar::Mesh::update(float delta) {
-  const float speed = 256.0f;
+  const float speed = 128.0f;
   
   //location_[2] = -0.001f;
   
-  //degrees_ += (speed * delta);
+  degrees_ += (speed * delta);
   time_ += delta;
   bind("delta", time_);
   //fprintf(stderr, "degrees: %f\n", degrees_);
@@ -182,7 +182,7 @@ GLfloat *bar::Mesh::getModelView() {
   mtxLoadTranslate(translation, location_[0], location_[1], location_[2]);
     
   mtxMultiply(temp, rotation, brotation);
-  mtxMultiply(modelView_, temp, translation);
+  mtxMultiply(modelView_, translation, temp);
   return modelView_;
 }
 
