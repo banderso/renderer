@@ -12,6 +12,7 @@
 
 #include <OpenGL/gl3.h>
 
+#include "Framebuffer.h"
 #include "Shader.h"
 #include "Mesh.h"
 
@@ -39,16 +40,6 @@ struct RendererContext {
 struct Renderable {
   Mesh *mesh;
 };
-  
-struct Framebuffer {
-  Framebuffer() :fbo(), framebufferId(), colorBuffer(), depthStencilBuffer(), mesh(){}
-  GLuint framebufferId;
-  GLuint fbo;
-  GLuint colorBuffer;
-  GLuint depthStencilBuffer;
-  
-  Mesh *mesh;
-};
     
 class Renderer {
  public:
@@ -60,24 +51,16 @@ class Renderer {
  private:
   void clear() const;
   void drawObjects(float delta) const;
-  void activateFramebuffer() const;
-  void deactivateFramebuffer() const;
-  void drawFramebuffer(float delta) const;
         
   void initializeRenderables(uint32_t count, const RenderableContext *contexts);
-  void initializeFrambuffer(RendererContext *context);
-  void initializeTexture();
-  void initializeRenderBuffer();
         
   void clearRenderables();
-  void clearFramebuffer();
-  void clearTexture();
-  void clearRenderBuffer();
         
   uint32_t renderableCount;
   Renderable *renderables;
   
-  Framebuffer buffer;
+  Framebuffer *buffer;
+  GLubyte *pixels;
   
   GLfloat viewWidth;
   GLfloat viewHeight;

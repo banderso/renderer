@@ -139,6 +139,12 @@ void bar::Mesh::activate() const {
   material_->use();
 }
 
+void bar::Mesh::bind(const char *name, GLint data) const {
+  if (material_) {
+    material_->bindUniform(name, data);
+  }
+}
+
 void bar::Mesh::bind(const char *name, GLfloat data) const {
   if (material_) {
     material_->bindUniform(name, data);

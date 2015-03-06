@@ -29,6 +29,7 @@
 		2FF83AF4195751DC00A1682E /* RendererTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83AF3195751DC00A1682E /* RendererTests.m */; };
 		2FF83AFE195751F500A1682E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FF83AFD195751F500A1682E /* OpenGL.framework */; };
 		2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FF83B0319575F4300A1682E /* Renderer.cpp */; };
+		2FFA05C31AA9782900BC4C91 /* Framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA05C21AA9782900BC4C91 /* Framebuffer.cpp */; };
 		2FFA794E195F983300A55D48 /* glutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA794D195F983300A55D48 /* glutil.c */; };
 		2FFA7950195F9A4400A55D48 /* fileutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA794F195F9A4400A55D48 /* fileutil.cpp */; };
 		2FFA7954195FAB2500A55D48 /* shaderutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FFA7953195FAB2500A55D48 /* shaderutil.cpp */; };
@@ -85,6 +86,8 @@
 		2FF83AFF1957549500A1682E /* BAROpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BAROpenGLView.h; sourceTree = "<group>"; };
 		2FF83B0319575F4300A1682E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		2FF83B0419575F4300A1682E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		2FFA05C11AA9760400BC4C91 /* Framebuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Framebuffer.h; sourceTree = "<group>"; };
+		2FFA05C21AA9782900BC4C91 /* Framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Framebuffer.cpp; sourceTree = "<group>"; };
 		2FFA794C195F982A00A55D48 /* glutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glutil.h; sourceTree = "<group>"; };
 		2FFA794D195F983300A55D48 /* glutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glutil.c; sourceTree = "<group>"; };
 		2FFA794F195F9A4400A55D48 /* fileutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileutil.cpp; sourceTree = "<group>"; };
@@ -238,6 +241,8 @@
 				2D89D8951AA0E4F900407EC0 /* Systems */,
 				2FF83B0319575F4300A1682E /* Renderer.cpp */,
 				2FF83B0419575F4300A1682E /* Renderer.h */,
+				2FFA05C21AA9782900BC4C91 /* Framebuffer.cpp */,
+				2FFA05C11AA9760400BC4C91 /* Framebuffer.h */,
 				2FFA795B1960D53600A55D48 /* Mesh.cpp */,
 				2FFA795C1960D53600A55D48 /* Mesh.h */,
 				2FFA794F195F9A4400A55D48 /* fileutil.cpp */,
@@ -365,6 +370,7 @@
 				2FFA7957195FAFB700A55D48 /* Shader.cpp in Sources */,
 				2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */,
 				2FFA7950195F9A4400A55D48 /* fileutil.cpp in Sources */,
+				2FFA05C31AA9782900BC4C91 /* Framebuffer.cpp in Sources */,
 				2FF83ADD195751DC00A1682E /* BARAppDelegate.m in Sources */,
 				2FFA795A1960CAF400A55D48 /* Material.cpp in Sources */,
 				2FFA7954195FAB2500A55D48 /* shaderutil.cpp in Sources */,

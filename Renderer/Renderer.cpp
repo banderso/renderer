@@ -29,8 +29,19 @@ bar::Renderer::Renderer(RendererContext &context,
   }
   
   if (postProcessingContext.renderableContexts != nullptr) {
-    this->initializeFrambuffer(&postProcessingContext);
+    const uint32_t index = std::numeric_limits<uint32_t>::max();
+    const bar::RenderableContext * const renderable = postProcessingContext.renderableContexts;
+    this->buffer = new Framebuffer(postProcessingContext.width,
+                                   postProcessingContext.height,
+                                   new Mesh(index,
+                                            renderable->vertices,
+                                            renderable->normals,
+                                            nullptr,
+                                            renderable->elements,
+                                            new Material(index, renderable->shader)));
   }
+  
+  this->pixels = nullptr;
 }
 
 bar::Renderer::~Renderer() {
@@ -42,26 +53,69 @@ void bar::Renderer::resize(float width, float height) {
   this->viewWidth = width;
   this->viewHeight = height;
   
-  this->clearFramebuffer();
-  this->initializeFrambuffer(nullptr);
+  this->buffer->resize(width, height);
+  
+  if (pixels != nullptr) {
+    delete [] this->pixels;
+  }
+  
+  const uint32_t widthui = static_cast<uint32_t>(width);
+  const uint32_t heightui = static_cast<uint32_t>(height);
+  const uint32_t size = 3 * widthui * heightui;
+  this->pixels = new GLubyte[size];
+  
+  for (int i = 0; i < size; ++i) {
+    this->pixels[i] = 0;
+  }
 }
 
 void bar::Renderer::draw(float delta) const {
-  this->clear();
-  this->activateFramebuffer();
-  glEnable(GL_DEPTH_TEST);
-  this->drawObjects(delta);
-  this->deactivateFramebuffer();
-  glDisable(GL_DEPTH_TEST);
-  this->drawFramebuffer(delta);
   
-  GLenum error = glGetError();
-  while (error != GL_NO_ERROR) {
-    fprintf(stdout, "Error: %s\n", GetGLErrorString(error));
-    error = glGetError();
+  
+  this->clear();
+  LogGLError(__LINE__, __FILE__);
+  
+  this->buffer->bind();
+  LogGLError(__LINE__, __FILE__);
+  if (!this->buffer->isComplete()) {
+    fprintf(stdout, "framebuffer isn't complete after binding\n");
   }
   
+  this->drawObjects(delta);
+  LogGLError(__LINE__, __FILE__);
+  
+  
+  /*
+  const uint32_t width = static_cast<uint32_t>(this->viewWidth);
+  const uint32_t height = static_cast<uint32_t>(this->viewHeight);
+  glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, this->pixels);
+  
+  int location = 0;
+  unsigned int color = 0;
+  for (int i = 0; i < height; ++i) {
+    for (int j = 0; j < width; ++j) {
+      location = i * width + j;
+      color = this->pixels[location] << 16 |
+              this->pixels[location + 1] << 8 |
+              this->pixels[location + 2];
+      
+      fprintf(stdout, "0x%06x ", color);
+    }
+    fprintf(stdout, "\n");
+  }
+  fprintf(stdout, "\n\n");
+  //*/
+  
+  this->buffer->unbind();
+  LogGLError(__LINE__, __FILE__);
+  
+  this->clear();
+  this->buffer->draw(delta);
+  
+  LogGLError(__LINE__, __FILE__);
+  
   glFlush();
+//  delete [] pixels;
 }
 
 void bar::Renderer::clear() const {
@@ -85,8 +139,6 @@ void bar::Renderer::drawObjects(float delta) const {
     Mesh *mesh = renderable.mesh;
     mesh->activate();
     mesh->update(delta);
-    
-    glGetError();
 
     mesh->bindProjection(projection);
     mesh->bindModelView();
@@ -95,35 +147,8 @@ void bar::Renderer::drawObjects(float delta) const {
                    mesh->getElementCount(),
                    mesh->getElementType(),
                    nullptr);
+    LogGLError(__LINE__, __FILE__);
   }
-}
-
-void bar::Renderer::drawFramebuffer(float delta) const {
-  GLfloat projection[16];
-  
-//  GLfloat aspectRatio = (GLfloat)this->viewWidth / (GLfloat)this->viewHeight;
-//  mtxLoadOrthographic(projection, -aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
-  mtxLoadOrthographic(projection, -1.0, 1.0, -1.0f, 1.0f, -1.0f, 1.0f);
-  
-  Mesh *mesh = this->buffer.mesh;
-  mesh->activate();
-  mesh->update(delta);
-  
-  mesh->bindProjection(projection);
-  //mesh->bindModelView();
-  
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, this->buffer.colorBuffer);
-  glUniform1i(this->buffer.framebufferId, 0);
-  glDrawElements(GL_TRIANGLES, mesh->getElementCount(), mesh->getElementType(), nullptr);
-}
-
-void bar::Renderer::activateFramebuffer() const {
-  glBindFramebuffer(GL_FRAMEBUFFER, this->buffer.fbo);
-}
-
-void bar::Renderer::deactivateFramebuffer() const {
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void bar::Renderer::initializeRenderables(uint32_t count,
@@ -167,89 +192,4 @@ void bar::Renderer::clearRenderables() {
   this->renderableCount = 0;
   this->renderables = NULL;
 }
-
-void bar::Renderer::initializeFrambuffer(RendererContext *context) {
-  if (context != nullptr) {
-    this->buffer = Framebuffer();
-    fprintf(stdout, "Initializing the framebuffer mesh.\n");
-    uint32_t index = std::numeric_limits<uint32_t>::max();
-    bar::RenderableContext *renderable = context->renderableContexts;
-    this->buffer.mesh = new Mesh(index,
-                                 renderable->vertices,
-                                 renderable->normals,
-                                 nullptr,
-                                 renderable->elements,
-                                 new Material(index, renderable->shader));
-    GLuint framebufferId = renderable->shader->getUniformLocation("framebuffer");
-    this->buffer.framebufferId = framebufferId;
-  }
-  
-  glGenFramebuffers(1, &this->buffer.fbo);
-  glBindFramebuffer(GL_FRAMEBUFFER, this->buffer.fbo);
-  
-  this->initializeTexture();
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->buffer.colorBuffer, 0);
-  
-  this->initializeRenderBuffer();
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->buffer.depthStencilBuffer);
-  
-  GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-  if (status != GL_FRAMEBUFFER_COMPLETE) {
-    fprintf(stderr, "Framebuffer failed to initialize. Aborting.\n");
-    exit(1);
-  }
-  
-  GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-  glDrawBuffers(1, drawBuffers);
-  
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void bar::Renderer::clearFramebuffer() {
-  glBindFramebuffer(GL_FRAMEBUFFER, this->buffer.fbo);
-  
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-  this->clearRenderBuffer();
-  
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
-  this->clearTexture();
-  
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glDeleteFramebuffers(1, &this->buffer.fbo);
-  this->buffer.fbo = 0;
-}
-
-void bar::Renderer::initializeTexture() {
-  const GLsizei width = static_cast<GLsizei>(this->viewWidth);
-  const GLsizei height = static_cast<GLsizei>(this->viewHeight);
-  
-  glGenTextures(1, &this->buffer.colorBuffer);
-  glBindTexture(GL_TEXTURE_2D, this->buffer.colorBuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
-
-void bar::Renderer::clearTexture() {
-  glDeleteTextures(1, &this->buffer.colorBuffer);
-  this->buffer.colorBuffer = 0;
-}
-
-void bar::Renderer::initializeRenderBuffer() {
-  const GLsizei width = static_cast<GLsizei>(this->viewWidth);
-  const GLsizei height = static_cast<GLsizei>(this->viewHeight);
-  
-  glGenRenderbuffers(1, &this->buffer.depthStencilBuffer);
-  glBindRenderbuffer(GL_RENDERBUFFER, this->buffer.depthStencilBuffer);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-//  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, this->viewWidth, this->viewHeight);
-}
-
-void bar::Renderer::clearRenderBuffer() {
-  glDeleteRenderbuffers(1, &this->buffer.depthStencilBuffer);
-  this->buffer.depthStencilBuffer = 0;
-}
-
 

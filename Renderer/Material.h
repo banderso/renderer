@@ -20,6 +20,7 @@ class Material {
   ~Material();
         
   void use() const;
+  void bindUniform(const char *name, GLint data) const;
   void bindUniform(const char *name, GLfloat data) const;
   void bindUniform(const char *name, GLfloat *data) const;
         
