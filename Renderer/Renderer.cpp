@@ -9,8 +9,10 @@
 #include <iostream>
 #include "Renderer.h"
 #include "matrix.h"
+#include "glutil.h"
 
-bar::Renderer::Renderer(RendererContext &context) {
+bar::Renderer::Renderer(RendererContext &context,
+                        RendererContext &postProcessingContext) {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClearDepth(1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -26,7 +28,9 @@ bar::Renderer::Renderer(RendererContext &context) {
     this->initializeRenderables(context.renderableContextCount, contexts);
   }
   
-  this->initializeFrambuffer();
+  if (postProcessingContext.renderableContexts != nullptr) {
+    this->initializeFrambuffer(&postProcessingContext);
+  }
 }
 
 bar::Renderer::~Renderer() {
@@ -34,19 +38,30 @@ bar::Renderer::~Renderer() {
 }
 
 void bar::Renderer::resize(float width, float height) {
+  fprintf(stdout, "(%f, %f) %f\n", width, height, width / height);
   this->viewWidth = width;
   this->viewHeight = height;
   
   this->clearFramebuffer();
-  this->initializeFrambuffer();
+  this->initializeFrambuffer(nullptr);
 }
 
 void bar::Renderer::draw(float delta) const {
   this->clear();
   this->activateFramebuffer();
+  glEnable(GL_DEPTH_TEST);
   this->drawObjects(delta);
   this->deactivateFramebuffer();
-
+  glDisable(GL_DEPTH_TEST);
+  this->drawFramebuffer(delta);
+  
+  GLenum error = glGetError();
+  while (error != GL_NO_ERROR) {
+    fprintf(stdout, "Error: %s\n", GetGLErrorString(error));
+    error = glGetError();
+  }
+  
+  glFlush();
 }
 
 void bar::Renderer::clear() const {
@@ -81,11 +96,26 @@ void bar::Renderer::drawObjects(float delta) const {
                    mesh->getElementType(),
                    nullptr);
   }
-  glFlush();
 }
 
-void bar::Renderer::drawFramebuffer() const {
+void bar::Renderer::drawFramebuffer(float delta) const {
+  GLfloat projection[16];
   
+//  GLfloat aspectRatio = (GLfloat)this->viewWidth / (GLfloat)this->viewHeight;
+//  mtxLoadOrthographic(projection, -aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
+  mtxLoadOrthographic(projection, -1.0, 1.0, -1.0f, 1.0f, -1.0f, 1.0f);
+  
+  Mesh *mesh = this->buffer.mesh;
+  mesh->activate();
+  mesh->update(delta);
+  
+  mesh->bindProjection(projection);
+  //mesh->bindModelView();
+  
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, this->buffer.colorBuffer);
+  glUniform1i(this->buffer.framebufferId, 0);
+  glDrawElements(GL_TRIANGLES, mesh->getElementCount(), mesh->getElementType(), nullptr);
 }
 
 void bar::Renderer::activateFramebuffer() const {
@@ -138,8 +168,22 @@ void bar::Renderer::clearRenderables() {
   this->renderables = NULL;
 }
 
-void bar::Renderer::initializeFrambuffer() {
-  this->buffer = Framebuffer();
+void bar::Renderer::initializeFrambuffer(RendererContext *context) {
+  if (context != nullptr) {
+    this->buffer = Framebuffer();
+    fprintf(stdout, "Initializing the framebuffer mesh.\n");
+    uint32_t index = std::numeric_limits<uint32_t>::max();
+    bar::RenderableContext *renderable = context->renderableContexts;
+    this->buffer.mesh = new Mesh(index,
+                                 renderable->vertices,
+                                 renderable->normals,
+                                 nullptr,
+                                 renderable->elements,
+                                 new Material(index, renderable->shader));
+    GLuint framebufferId = renderable->shader->getUniformLocation("framebuffer");
+    this->buffer.framebufferId = framebufferId;
+  }
+  
   glGenFramebuffers(1, &this->buffer.fbo);
   glBindFramebuffer(GL_FRAMEBUFFER, this->buffer.fbo);
   
@@ -147,64 +191,24 @@ void bar::Renderer::initializeFrambuffer() {
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->buffer.colorBuffer, 0);
   
   this->initializeRenderBuffer();
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->buffer.depthStencilBuffer);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->buffer.depthStencilBuffer);
+  
+  GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+  if (status != GL_FRAMEBUFFER_COMPLETE) {
+    fprintf(stderr, "Framebuffer failed to initialize. Aborting.\n");
+    exit(1);
+  }
+  
+  GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+  glDrawBuffers(1, drawBuffers);
   
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  
-  GLfloat vertices[] = {
-    -1.0f,  1.0f,  1.0f, // 0
-    -1.0f,  1.0f, -1.0f, // 1
-    1.0f,  1.0f, -1.0f,  // 2
-    1.0f,  1.0f,  1.0f,  // 3
-    
-    -1.0f, -1.0f,  1.0f, // 4
-    -1.0f, -1.0f, -1.0f, // 5
-    1.0f, -1.0f, -1.0f,  // 6
-    1.0f, -1.0f,  1.0f,  // 7
-  };
-  
-  GLfloat normal_vals[] = {
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, 1.0f
-  };
-  
-  GLuint element_vals[] = {
-//    0, 1, 2,  0, 2, 3, // top
-    0, 3, 4,  4, 3, 7, // front
-//    7, 3, 6,  6, 3, 2, // right
-//    6, 7, 5,  5, 7, 4, // bottom
-//    6, 2, 5,  5, 2, 1, // back
-//    1, 4, 0,  1, 5, 4  // left
-  };
-  
-  bar::MeshAttribute positions = {
-    static_cast<GLvoid *>(vertices),
-    GL_FLOAT,
-    3,
-    sizeof(vertices)
-  };
-  bar::MeshAttribute normals = {
-    static_cast<GLvoid *>(normal_vals),
-    GL_FLOAT,
-    3,
-    sizeof(normal_vals)
-  };
-  bar::MeshAttribute elements = {
-    static_cast<GLvoid *>(element_vals),
-    GL_UNSIGNED_INT,
-    1,
-    sizeof(element_vals)
-  };
-  
-  this->buffer.mesh = new Mesh(0, &positions, &normals, nullptr, &elements, nullptr);
 }
 
 void bar::Renderer::clearFramebuffer() {
   glBindFramebuffer(GL_FRAMEBUFFER, this->buffer.fbo);
   
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
   this->clearRenderBuffer();
   
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
@@ -216,11 +220,16 @@ void bar::Renderer::clearFramebuffer() {
 }
 
 void bar::Renderer::initializeTexture() {
+  const GLsizei width = static_cast<GLsizei>(this->viewWidth);
+  const GLsizei height = static_cast<GLsizei>(this->viewHeight);
+  
   glGenTextures(1, &this->buffer.colorBuffer);
   glBindTexture(GL_TEXTURE_2D, this->buffer.colorBuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->viewWidth, this->viewHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void bar::Renderer::clearTexture() {
@@ -229,9 +238,13 @@ void bar::Renderer::clearTexture() {
 }
 
 void bar::Renderer::initializeRenderBuffer() {
+  const GLsizei width = static_cast<GLsizei>(this->viewWidth);
+  const GLsizei height = static_cast<GLsizei>(this->viewHeight);
+  
   glGenRenderbuffers(1, &this->buffer.depthStencilBuffer);
   glBindRenderbuffer(GL_RENDERBUFFER, this->buffer.depthStencilBuffer);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, this->viewWidth, this->viewHeight);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+//  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, this->viewWidth, this->viewHeight);
 }
 
 void bar::Renderer::clearRenderBuffer() {

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D0312111AA8BC4700065062 /* post.vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2D0312101AA8BC4700065062 /* post.vert.glsl */; };
+		2D0312131AA8BC5E00065062 /* post.frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2D0312121AA8BC5E00065062 /* post.frag.glsl */; };
 		2D89D8941AA0DC5B00407EC0 /* MeshSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */; };
 		2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */; };
 		2F1B69C01957FCEC005D6C83 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */; };
@@ -47,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D0312101AA8BC4700065062 /* post.vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = post.vert.glsl; sourceTree = "<group>"; };
+		2D0312121AA8BC5E00065062 /* post.frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = post.frag.glsl; sourceTree = "<group>"; };
 		2D89D8911AA0DC5B00407EC0 /* MaterialSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterialSystem.h; sourceTree = "<group>"; };
 		2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshSystem.cpp; sourceTree = "<group>"; };
 		2D89D8931AA0DC5B00407EC0 /* MeshSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshSystem.h; sourceTree = "<group>"; };
@@ -134,6 +138,8 @@
 			children = (
 				2F1B69CB195A6174005D6C83 /* default.frag.glsl */,
 				2F1B69CD195A617F005D6C83 /* default.vert.glsl */,
+				2D0312101AA8BC4700065062 /* post.vert.glsl */,
+				2D0312121AA8BC5E00065062 /* post.frag.glsl */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -329,12 +335,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D0312131AA8BC5E00065062 /* post.frag.glsl in Resources */,
 				2FF83AD4195751DC00A1682E /* InfoPlist.strings in Resources */,
 				2F1B69CE195A617F005D6C83 /* default.vert.glsl in Resources */,
 				2FF83AE2195751DC00A1682E /* Images.xcassets in Resources */,
 				2FF83ADA195751DC00A1682E /* Credits.rtf in Resources */,
 				2FFA795F19612ECE00A55D48 /* TODO.txt in Resources */,
 				2FF83AE0195751DC00A1682E /* MainMenu.xib in Resources */,
+				2D0312111AA8BC4700065062 /* post.vert.glsl in Resources */,
 				2F1B69CC195A6174005D6C83 /* default.frag.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

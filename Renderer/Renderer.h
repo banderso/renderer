@@ -41,6 +41,8 @@ struct Renderable {
 };
   
 struct Framebuffer {
+  Framebuffer() :fbo(), framebufferId(), colorBuffer(), depthStencilBuffer(), mesh(){}
+  GLuint framebufferId;
   GLuint fbo;
   GLuint colorBuffer;
   GLuint depthStencilBuffer;
@@ -50,7 +52,8 @@ struct Framebuffer {
     
 class Renderer {
  public:
-  Renderer(RendererContext &context);
+  Renderer(RendererContext &context,
+           RendererContext &postProcessingContext);
   virtual ~Renderer();
   void draw(float delta) const;
   void resize(float width, float height);
@@ -59,10 +62,10 @@ class Renderer {
   void drawObjects(float delta) const;
   void activateFramebuffer() const;
   void deactivateFramebuffer() const;
-  void drawFramebuffer() const;
+  void drawFramebuffer(float delta) const;
         
   void initializeRenderables(uint32_t count, const RenderableContext *contexts);
-  void initializeFrambuffer();
+  void initializeFrambuffer(RendererContext *context);
   void initializeTexture();
   void initializeRenderBuffer();
         
