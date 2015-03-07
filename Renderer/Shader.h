@@ -23,6 +23,7 @@ class Shader {
   GLint getUniformLocation(const char *uniformName) const;
         
   void activate() const;
+  void deactivate() const;
         
   void listAttributes() const;
   void listUniforms() const;

@@ -25,8 +25,8 @@ class Framebuffer {
   void bind();
   void unbind();
   
+  void activate() const;
   void draw(float delta) const;
-  
   void resize(float width, float height);
   
   bool isComplete() const;

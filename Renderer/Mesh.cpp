@@ -47,7 +47,7 @@ bar::Mesh::Mesh(uint32_t key,
                  positions->data_array_size,
                  positions->data,
                  GL_STATIC_DRAW);
-        
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
         
     type_size = GetGLTypeSize(positions->data_type);
     glEnableVertexAttribArray(AttribOffset::POS_ATTRIB);
@@ -57,6 +57,7 @@ bar::Mesh::Mesh(uint32_t key,
                           GL_FALSE,
                           0, //positions->data_size * type_size,
                           0);
+    glDisableVertexAttribArray(AttribOffset::POS_ATTRIB);
   }
     
   if (normals) {
@@ -65,7 +66,8 @@ bar::Mesh::Mesh(uint32_t key,
                  normals->data_array_size,
                  normals->data,
                  GL_STATIC_DRAW);
-        
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
     type_size = GetGLTypeSize(normals->data_type);
     glEnableVertexAttribArray(AttribOffset::NORMAL_ATTRIB);
     glVertexAttribPointer(AttribOffset::NORMAL_ATTRIB,
@@ -74,6 +76,7 @@ bar::Mesh::Mesh(uint32_t key,
                           GL_FALSE,
                           0, //normals->data_size * type_size,
                           0);
+    glDisableVertexAttribArray(AttribOffset::NORMAL_ATTRIB);
   }
     
   if (texcoords) {
@@ -83,7 +86,8 @@ bar::Mesh::Mesh(uint32_t key,
                  texcoords->data_array_size,
                  texcoords->data,
                  GL_STATIC_DRAW);
-        
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    
     type_size = GetGLTypeSize(texcoords->data_type);
     glEnableVertexAttribArray(AttribOffset::TEX_ATTRIB);
     glVertexAttribPointer(AttribOffset::TEX_ATTRIB,
@@ -92,6 +96,7 @@ bar::Mesh::Mesh(uint32_t key,
                           GL_FALSE,
                           0, //texcoords->data_size * type_size,
                           0);
+    glDisableVertexAttribArray(AttribOffset::TEX_ATTRIB);
   }
     
   if (elements) {
@@ -100,7 +105,8 @@ bar::Mesh::Mesh(uint32_t key,
                  elements->data_array_size,
                  elements->data,
                  GL_STATIC_DRAW);
-        
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
     element_type_ = elements->data_type;
     element_count_ = elements->data_array_size / GetGLTypeSize(element_type_);
   }
@@ -136,7 +142,23 @@ void bar::Mesh::update(float delta) {
 
 void bar::Mesh::activate() const {
   glBindVertexArray(vao_name_);
-  material_->use();
+//  glBindBuffer(GL_ARRAY_BUFFER, buffers_[BufferType::VERTEX]);
+//  glEnableVertexAttribArray(AttribOffset::POS_ATTRIB);
+//  
+//  glBindBuffer(GL_ARRAY_BUFFER, buffers_[BufferType::NORMAL]);
+//  glEnableVertexAttribArray(AttribOffset::NORMAL_ATTRIB);
+//  
+//  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers_[ELEMENT]);
+//  glEnableVertexAttribArray(AttribOffset::ELEMENT_ATTRIB);
+  material_->bind();
+}
+
+void bar::Mesh::deactivate() const {
+//  glDisableVertexAttribArray(AttribOffset::POS_ATTRIB);
+//  glDisableVertexAttribArray(AttribOffset::NORMAL_ATTRIB);
+//  glDisableVertexAttribArray(AttribOffset::ELEMENT_ATTRIB);
+  glBindVertexArray(0);
+  material_->unbind();
 }
 
 void bar::Mesh::bind(const char *name, GLint data) const {

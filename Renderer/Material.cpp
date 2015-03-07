@@ -20,8 +20,12 @@ bar::Material::~Material() {
   delete shader_;
 }
 
-void bar::Material::use() const {
+void bar::Material::bind() const {
   this->shader_->activate();
+}
+
+void bar::Material::unbind() const {
+  this->shader_->deactivate();
 }
 
 void bar::Material::bindUniform(const char *name, GLint data) const {

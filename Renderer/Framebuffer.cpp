@@ -46,6 +46,15 @@ void bar::Framebuffer::unbind() {
   }
 }
 
+void bar::Framebuffer::activate() const {
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, this->colorBuffer);
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->colorBuffer, 0);
+  
+  GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+  glDrawBuffers(1, drawBuffers);
+}
+
 void bar::Framebuffer::draw(float delta) const {
   if (this->isBound) return;
   
@@ -66,6 +75,8 @@ void bar::Framebuffer::draw(float delta) const {
                  mesh->getElementCount(),
                  mesh->getElementType(),
                  nullptr);
+  
+  mesh->deactivate();
 }
 
 void bar::Framebuffer::resize(float width, float height) {
@@ -78,7 +89,7 @@ void bar::Framebuffer::resize(float width, float height) {
   
   this->bind();
   this->initColorBuffer();
-  this->initRenderBuffer();
+//  this->initRenderBuffer();
   
   if (!this->isComplete()) {
     fprintf(stderr, "Framebuffer failed to initialize. Aborting.\n");
@@ -100,11 +111,11 @@ void bar::Framebuffer::initColorBuffer() {
   glGenTextures(1, &this->colorBuffer);
   glBindTexture(GL_TEXTURE_2D, this->colorBuffer);
   
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
   
 //  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorBuffer, 0);
   glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->colorBuffer, 0);
@@ -126,7 +137,7 @@ void bar::Framebuffer::initRenderBuffer() {
 
 void bar::Framebuffer::clear() {
   this->bind();
-  this->clearRenderBuffer();
+//  this->clearRenderBuffer();
   this->clearColorBuffer();
   this->unbind();
 }

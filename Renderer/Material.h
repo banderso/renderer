@@ -19,7 +19,8 @@ class Material {
   Material(uint32_t key, const Shader *shader);
   ~Material();
         
-  void use() const;
+  void bind() const;
+  void unbind() const;
   void bindUniform(const char *name, GLint data) const;
   void bindUniform(const char *name, GLfloat data) const;
   void bindUniform(const char *name, GLfloat *data) const;

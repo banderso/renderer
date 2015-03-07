@@ -70,6 +70,7 @@ class Mesh {
   void update(float delta);
         
   void activate() const;
+  void deactivate() const;
   void bind(const char *name, GLint data) const;
   void bind(const char *name, GLfloat data) const;
   void bindProjection(GLfloat *projection) const;

@@ -70,20 +70,16 @@ void bar::Renderer::resize(float width, float height) {
 }
 
 void bar::Renderer::draw(float delta) const {
-  
+  this->buffer->bind();
+  LogGLError(__LINE__, __FILE__);
   
   this->clear();
   LogGLError(__LINE__, __FILE__);
   
-  this->buffer->bind();
+  this->buffer->activate();
   LogGLError(__LINE__, __FILE__);
-  if (!this->buffer->isComplete()) {
-    fprintf(stdout, "framebuffer isn't complete after binding\n");
-  }
   
   this->drawObjects(delta);
-  LogGLError(__LINE__, __FILE__);
-  
   
   /*
   const uint32_t width = static_cast<uint32_t>(this->viewWidth);
@@ -138,7 +134,9 @@ void bar::Renderer::drawObjects(float delta) const {
     const Renderable &renderable = renderables[i];
     Mesh *mesh = renderable.mesh;
     mesh->activate();
+    LogGLError(__LINE__, __FILE__);
     mesh->update(delta);
+    LogGLError(__LINE__, __FILE__);
 
     mesh->bindProjection(projection);
     mesh->bindModelView();
@@ -148,6 +146,8 @@ void bar::Renderer::drawObjects(float delta) const {
                    mesh->getElementType(),
                    nullptr);
     LogGLError(__LINE__, __FILE__);
+    
+    mesh->deactivate();
   }
 }
 
