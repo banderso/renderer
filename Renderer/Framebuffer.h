@@ -22,8 +22,8 @@ class Framebuffer {
   Framebuffer(float width, float height, Mesh *mesh);
   virtual ~Framebuffer();
   
-  void bind();
-  void unbind();
+  void bind() const;
+  void unbind() const;
   
   void activate() const;
   void draw(float delta) const;
@@ -39,13 +39,14 @@ class Framebuffer {
   void clearColorBuffer();
   void clearRenderBuffer();
   
-  bool isBound;
   GLuint width;
   GLuint height;
   
   GLuint fbo;
   GLuint colorBuffer;
   GLuint depthStencilBuffer;
+  
+  GLuint sampler;
   
   Mesh *mesh;
 };

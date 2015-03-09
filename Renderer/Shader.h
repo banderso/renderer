@@ -27,6 +27,8 @@ class Shader {
         
   void listAttributes() const;
   void listUniforms() const;
+  
+  void validate() const;
         
  private:
   Shader();

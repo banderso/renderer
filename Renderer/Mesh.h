@@ -51,7 +51,7 @@ struct MeshContext {
   //
   MeshAttribute *vertices;
   MeshAttribute *normals;
-  //MesshAttribure *textCoords;
+  MeshAttribute *textCoords;
   MeshAttribute *elements;
   //
   Shader *shader;
@@ -76,6 +76,8 @@ class Mesh {
   void bindProjection(GLfloat *projection) const;
   void bindModelView();
   //void bindModelView(GLfloat *modelView) const;
+  
+  void validate() const;
         
   GLenum getElementType() const;
   GLsizei getElementCount() const;

@@ -40,5 +40,8 @@ void bar::Material::bindUniform(const char *name, GLfloat *data) const {
   glUniformMatrix4fv(shader_->getUniformLocation(name), 1, GL_FALSE, data);
 }
 
+void bar::Material::validate() const {
+  this->shader_->validate();
+}
 
 

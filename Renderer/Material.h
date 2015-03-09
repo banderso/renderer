@@ -24,6 +24,8 @@ class Material {
   void bindUniform(const char *name, GLint data) const;
   void bindUniform(const char *name, GLfloat data) const;
   void bindUniform(const char *name, GLfloat *data) const;
+  
+  void validate() const;
         
  private:
   Material();

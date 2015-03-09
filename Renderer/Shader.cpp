@@ -70,3 +70,7 @@ void bar::Shader::listUniforms() const {
   bar::PrintProgramUniforms(this->program);
 }
 
+void bar::Shader::validate() const {
+  glValidateProgram(this->program);
+}
+

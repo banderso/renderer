@@ -22,7 +22,7 @@ struct RenderableContext {
   //
   MeshAttribute *vertices;
   MeshAttribute *normals;
-  //MesshAttribure *textCoords;
+  MeshAttribute *textCoords;
   MeshAttribute *elements;
   //
   //char *textureFilename;
@@ -60,7 +60,6 @@ class Renderer {
   Renderable *renderables;
   
   Framebuffer *buffer;
-  GLubyte *pixels;
   
   GLfloat viewWidth;
   GLfloat viewHeight;
