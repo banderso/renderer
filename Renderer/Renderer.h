@@ -12,6 +12,7 @@
 
 #include <OpenGL/gl3.h>
 
+#include "Framebuffer.h"
 #include "Shader.h"
 #include "Mesh.h"
 
@@ -21,7 +22,7 @@ struct RenderableContext {
   //
   MeshAttribute *vertices;
   MeshAttribute *normals;
-  //MesshAttribure *textCoords;
+  MeshAttribute *textCoords;
   MeshAttribute *elements;
   //
   //char *textureFilename;
@@ -42,7 +43,8 @@ struct Renderable {
     
 class Renderer {
  public:
-  Renderer(RendererContext &context);
+  Renderer(RendererContext &context,
+           RendererContext &postProcessingContext);
   virtual ~Renderer();
   void draw(float delta) const;
   void resize(float width, float height);
@@ -56,6 +58,9 @@ class Renderer {
         
   uint32_t renderableCount;
   Renderable *renderables;
+  
+  Framebuffer *buffer;
+  
   GLfloat viewWidth;
   GLfloat viewHeight;
 };

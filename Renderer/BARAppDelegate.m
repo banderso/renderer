@@ -16,4 +16,9 @@
     //[[self view] finishInit];
 }
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+  return YES;
+}
+
 @end

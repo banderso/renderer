@@ -6,7 +6,7 @@ in vec3 varNormal;
 in mat4 varModelView;
 in mat4 varModelViewInverseTranspose;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 vec4 compute_light(vec3 direction, vec4 light_color, vec3 normal, vec3 half_vec, vec4 diffuse, vec4 specular, float shininess) {
   
@@ -142,7 +142,7 @@ vec4 invert(vec4 color) {
 }
 
 void main() {
-  float n = abs(snoise(vec3(gl_FragCoord.xy * 0.009, varDelta * 0.5)));
+  float n = abs(snoise(vec3(gl_FragCoord.xy * 0.009, varDelta)));
   float r = 0.0;
   float g = 0.0;
   float b = 0.0;
@@ -165,7 +165,7 @@ void main() {
     b = 1.0;
   }
   
-  fragColor = invert(vec4(r, g, b, 1.0));
-//  fragColor = vec4(r, g, b, 1.0);
+//  fragColor = invert(vec4(r, g, b, 1.0));
+  fragColor = vec4(r, g, b, 1.0);
 //    fragColor = vec4(vec3(1.0, 0.85, 0.35), 1.0);
 }

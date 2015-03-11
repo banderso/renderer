@@ -48,7 +48,6 @@ bar::Mesh::Mesh(uint32_t key,
                  positions->data,
                  GL_STATIC_DRAW);
         
-        
     type_size = GetGLTypeSize(positions->data_type);
     glEnableVertexAttribArray(AttribOffset::POS_ATTRIB);
     glVertexAttribPointer(AttribOffset::POS_ATTRIB,
@@ -65,7 +64,7 @@ bar::Mesh::Mesh(uint32_t key,
                  normals->data_array_size,
                  normals->data,
                  GL_STATIC_DRAW);
-        
+    
     type_size = GetGLTypeSize(normals->data_type);
     glEnableVertexAttribArray(AttribOffset::NORMAL_ATTRIB);
     glVertexAttribPointer(AttribOffset::NORMAL_ATTRIB,
@@ -77,13 +76,13 @@ bar::Mesh::Mesh(uint32_t key,
   }
     
   if (texcoords) {
-    fprintf(stdout, "Binding Texture buffer\n");
+//    fprintf(stdout, "Binding Texture buffer\n");
     glBindBuffer(GL_ARRAY_BUFFER, buffers_[BufferType::TEXTURE]);
     glBufferData(GL_ARRAY_BUFFER,
                  texcoords->data_array_size,
                  texcoords->data,
                  GL_STATIC_DRAW);
-        
+    
     type_size = GetGLTypeSize(texcoords->data_type);
     glEnableVertexAttribArray(AttribOffset::TEX_ATTRIB);
     glVertexAttribPointer(AttribOffset::TEX_ATTRIB,
@@ -100,7 +99,7 @@ bar::Mesh::Mesh(uint32_t key,
                  elements->data_array_size,
                  elements->data,
                  GL_STATIC_DRAW);
-        
+    
     element_type_ = elements->data_type;
     element_count_ = elements->data_array_size / GetGLTypeSize(element_type_);
   }
@@ -124,11 +123,11 @@ bar::Mesh::~Mesh() {
 }
 
 void bar::Mesh::update(float delta) {
-  const float speed = 256.0f;
+  const float speed = 128.0f;
   
   //location_[2] = -0.001f;
   
-  //degrees_ += (speed * delta);
+  degrees_ += (speed * delta);
   time_ += delta;
   bind("delta", time_);
   //fprintf(stderr, "degrees: %f\n", degrees_);
@@ -136,7 +135,18 @@ void bar::Mesh::update(float delta) {
 
 void bar::Mesh::activate() const {
   glBindVertexArray(vao_name_);
-  material_->use();
+  material_->bind();
+}
+
+void bar::Mesh::deactivate() const {
+  glBindVertexArray(0);
+  material_->unbind();
+}
+
+void bar::Mesh::bind(const char *name, GLint data) const {
+  if (material_) {
+    material_->bindUniform(name, data);
+  }
 }
 
 void bar::Mesh::bind(const char *name, GLfloat data) const {
@@ -182,8 +192,12 @@ GLfloat *bar::Mesh::getModelView() {
   mtxLoadTranslate(translation, location_[0], location_[1], location_[2]);
     
   mtxMultiply(temp, rotation, brotation);
-  mtxMultiply(modelView_, temp, translation);
+  mtxMultiply(modelView_, translation, temp);
   return modelView_;
+}
+
+void bar::Mesh::validate() const {
+  this->material_->validate();
 }
 
 void bar::Mesh::setRotation(GLfloat degrees) {

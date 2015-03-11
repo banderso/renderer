@@ -20,8 +20,16 @@ bar::Material::~Material() {
   delete shader_;
 }
 
-void bar::Material::use() const {
+void bar::Material::bind() const {
   this->shader_->activate();
+}
+
+void bar::Material::unbind() const {
+  this->shader_->deactivate();
+}
+
+void bar::Material::bindUniform(const char *name, GLint data) const {
+  glUniform1i(shader_->getUniformLocation(name), data);
 }
 
 void bar::Material::bindUniform(const char *name, GLfloat data) const {
@@ -32,5 +40,8 @@ void bar::Material::bindUniform(const char *name, GLfloat *data) const {
   glUniformMatrix4fv(shader_->getUniformLocation(name), 1, GL_FALSE, data);
 }
 
+void bar::Material::validate() const {
+  this->shader_->validate();
+}
 
 

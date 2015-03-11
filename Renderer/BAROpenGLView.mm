@@ -128,17 +128,16 @@ float lastDelta = 0.0f;
 - (void)initGLContext
 {
   NSOpenGLPixelFormatAttribute attrs[] = {
-    NSOpenGLPFADoubleBuffer,
-    NSOpenGLPFADepthSize, 24,
-    
     NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion4_1Core,
-    
+    NSOpenGLPFAAccelerated,
+    NSOpenGLPFADoubleBuffer,
     NSOpenGLPFAMultisample,
+    NSOpenGLPFASampleAlpha,
     NSOpenGLPFASampleBuffers, 1,
     NSOpenGLPFASamples, 8,
-    
+    NSOpenGLPFAColorSize, 32,
+    NSOpenGLPFADepthSize, 16,
     NSOpenGLPFANoRecovery,
-    
     0
   };
   
@@ -200,12 +199,12 @@ float lastDelta = 0.0f;
   };
   
   GLuint element_vals[] = {
-//    0, 1, 2,  0, 2, 3, // top
+    0, 1, 2,  0, 2, 3, // top
     0, 3, 4,  4, 3, 7, // front
-//    7, 3, 6,  6, 3, 2, // right
-//    6, 7, 5,  5, 7, 4, // bottom
-//    6, 2, 5,  5, 2, 1, // back
-//    1, 4, 0,  1, 5, 4 // left
+    7, 3, 6,  6, 3, 2, // right
+    6, 7, 5,  5, 7, 4, // bottom
+    6, 2, 5,  5, 2, 1, // back
+    1, 4, 0,  1, 5, 4 // left
   };
   
   bar::MeshAttribute positions = {
@@ -214,7 +213,6 @@ float lastDelta = 0.0f;
     3,
     sizeof(vertices)
   };
-  
   bar::MeshAttribute normals = {
     static_cast<GLvoid *>(normal_vals),
     GL_FLOAT,
@@ -229,15 +227,17 @@ float lastDelta = 0.0f;
   };
   
   bar::RenderableContext renderable[] = {
-//    {
-//      &positions,
-//      &normals,
-//      &elements,
-//      shader
-//    },
     {
       &positions,
       &normals,
+      nullptr,
+      &elements,
+      shader
+    },
+    {
+      &positions,
+      &normals,
+      nullptr,
       &elements,
       shader
     }
@@ -246,10 +246,78 @@ float lastDelta = 0.0f;
   bar::RendererContext context;
   context.width = viewRectPixels.size.width;
   context.height = viewRectPixels.size.height;
-  context.renderableContextCount = 1;
+  context.renderableContextCount = 2;
   context.renderableContexts = renderable;
   
-  renderer = new bar::Renderer(context);
+  GLfloat post_vertices[] = {
+    -1.0f,  1.0f,  1.0f, // 0
+     1.0f,  1.0f,  1.0f, // 3
+    -1.0f, -1.0f,  1.0f, // 4
+     1.0f, -1.0f,  1.0f, // 7
+  };
+  
+  GLfloat post_normal_vals[] = {
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f
+  };
+  
+  GLfloat post_texture_coords[] = {
+    0.0, 0.0,
+    1.0, 0.0,
+    0.0, 1.0,
+    1.0, 1.0
+  };
+  
+  GLuint post_element_vals[] = {
+    0, 1, 2,  2, 1, 3
+  };
+  bar::MeshAttribute post_positions = {
+    static_cast<GLvoid *>(post_vertices),
+    GL_FLOAT,
+    3,
+    sizeof(post_vertices)
+  };
+  bar::MeshAttribute post_normals = {
+    static_cast<GLvoid *>(post_normal_vals),
+    GL_FLOAT,
+    3,
+    sizeof(post_normal_vals)
+  };
+  bar::MeshAttribute post_texcoords = {
+    static_cast<GLvoid *>(post_texture_coords),
+    GL_FLOAT,
+    2,
+    sizeof(post_texture_coords)
+  };
+  bar::MeshAttribute post_elements = {
+    static_cast<GLvoid *>(post_element_vals),
+    GL_UNSIGNED_INT,
+    1,
+    sizeof(post_element_vals)
+  };
+  
+  shader = new bar::Shader(concat(basePath, "/post.vert.glsl"),
+                           concat(basePath, "/post.frag.glsl"));
+  
+  bar::RenderableContext postProcessingRenderable[] = {
+    {
+      &post_positions,
+      &post_normals,
+      &post_texcoords,
+      &post_elements,
+      shader
+    }
+  };
+  
+  bar::RendererContext postProcessingContext;
+  postProcessingContext.width = viewRectPixels.size.width;
+  postProcessingContext.height = viewRectPixels.size.height;
+  postProcessingContext.renderableContextCount = 1;
+  postProcessingContext.renderableContexts = postProcessingRenderable;
+  
+  renderer = new bar::Renderer(context, postProcessingContext);
 }
 
 - (void)cleanUp

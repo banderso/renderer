@@ -58,11 +58,19 @@ void bar::Shader::activate() const {
   glUseProgram(this->program);
 }
 
+void bar::Shader::deactivate() const {
+  glUseProgram(0);
+}
+
 void bar::Shader::listAttributes() const {
   bar::PrintProgramAttributes(this->program);
 }
 
 void bar::Shader::listUniforms() const {
   bar::PrintProgramUniforms(this->program);
+}
+
+void bar::Shader::validate() const {
+  glValidateProgram(this->program);
 }
 

@@ -52,6 +52,14 @@ inline const char * GetGLErrorString(GLenum error)
 	return str;
 }
 
+void LogGLError(int line, const char *file) {
+  GLenum error = glGetError();
+  while (error != GL_NO_ERROR) {
+    fprintf(stdout, "Error (%s:%d): %s\n", file, line, GetGLErrorString(error));
+    error = glGetError();
+  }
+}
+
 GLsizei GetGLTypeSize(GLenum type)
 {
 	switch (type) {

@@ -18,6 +18,7 @@ extern "C" {
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
     
 const char * GetGLErrorString(GLenum error);
+void LogGLError(int line, const char *file);
 GLsizei GetGLTypeSize(GLenum type);
     
 #ifdef __cplusplus

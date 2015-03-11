@@ -46,6 +46,16 @@ struct MeshAttribute {
   GLuint data_size;
   GLsizei data_array_size;
 };
+  
+struct MeshContext {
+  //
+  MeshAttribute *vertices;
+  MeshAttribute *normals;
+  MeshAttribute *textCoords;
+  MeshAttribute *elements;
+  //
+  Shader *shader;
+};
     
 class Mesh {
  public:
@@ -60,10 +70,14 @@ class Mesh {
   void update(float delta);
         
   void activate() const;
+  void deactivate() const;
+  void bind(const char *name, GLint data) const;
   void bind(const char *name, GLfloat data) const;
   void bindProjection(GLfloat *projection) const;
   void bindModelView();
   //void bindModelView(GLfloat *modelView) const;
+  
+  void validate() const;
         
   GLenum getElementType() const;
   GLsizei getElementCount() const;
