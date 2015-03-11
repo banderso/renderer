@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D0312111AA8BC4700065062 /* post.vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2D0312101AA8BC4700065062 /* post.vert.glsl */; };
 		2D0312131AA8BC5E00065062 /* post.frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 2D0312121AA8BC5E00065062 /* post.frag.glsl */; };
+		2D0312161AADF5EA00065062 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D0312141AADF5EA00065062 /* Texture.cpp */; };
 		2D89D8941AA0DC5B00407EC0 /* MeshSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */; };
 		2F1B69BE19576011005D6C83 /* BAROpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2F1B69BD19576011005D6C83 /* BAROpenGLView.mm */; };
 		2F1B69C01957FCEC005D6C83 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F1B69BF1957FCEC005D6C83 /* QuartzCore.framework */; };
@@ -52,6 +53,8 @@
 /* Begin PBXFileReference section */
 		2D0312101AA8BC4700065062 /* post.vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = post.vert.glsl; sourceTree = "<group>"; };
 		2D0312121AA8BC5E00065062 /* post.frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = post.frag.glsl; sourceTree = "<group>"; };
+		2D0312141AADF5EA00065062 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		2D0312151AADF5EA00065062 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		2D89D8911AA0DC5B00407EC0 /* MaterialSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterialSystem.h; sourceTree = "<group>"; };
 		2D89D8921AA0DC5B00407EC0 /* MeshSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshSystem.cpp; sourceTree = "<group>"; };
 		2D89D8931AA0DC5B00407EC0 /* MeshSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshSystem.h; sourceTree = "<group>"; };
@@ -259,6 +262,8 @@
 				2FFA7956195FAFB700A55D48 /* Shader.h */,
 				2FFA79581960CAF400A55D48 /* Material.cpp */,
 				2FFA79591960CAF400A55D48 /* Material.h */,
+				2D0312141AADF5EA00065062 /* Texture.cpp */,
+				2D0312151AADF5EA00065062 /* Texture.h */,
 			);
 			name = Renderer;
 			sourceTree = "<group>";
@@ -367,6 +372,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D0312161AADF5EA00065062 /* Texture.cpp in Sources */,
 				2FFA7957195FAFB700A55D48 /* Shader.cpp in Sources */,
 				2FF83B0519575F4300A1682E /* Renderer.cpp in Sources */,
 				2FFA7950195F9A4400A55D48 /* fileutil.cpp in Sources */,

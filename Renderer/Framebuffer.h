@@ -14,6 +14,7 @@
 
 #include "Shader.h"
 #include "Mesh.h"
+#include "Texture.h"
 
 namespace bar {
   
@@ -43,11 +44,13 @@ class Framebuffer {
   GLuint height;
   
   GLuint fbo;
-  GLuint colorBuffer;
+//  GLuint colorBuffer;
   GLuint depthStencilBuffer;
   
-  GLuint sampler;
+//  GLuint sampler;
   
+  Texture *texture;
+  TextureParameters *texParams;
   Mesh *mesh;
 };
   

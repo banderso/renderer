@@ -17,8 +17,9 @@ bar::Framebuffer::Framebuffer(float width, float height, Mesh *mesh)
     : width(0)
     , height(0)
     , fbo(0)
-    , colorBuffer(0)
     , depthStencilBuffer(0)
+    , texture(nullptr)
+    , texParams(nullptr)
     , mesh(mesh)
 {
   fprintf(stdout, "Initializing the framebuffer mesh.\n");
@@ -41,12 +42,8 @@ void bar::Framebuffer::unbind() const {
 }
 
 void bar::Framebuffer::activate() const {
-//  glActiveTexture(GL_TEXTURE0);
-//  glBindTexture(GL_TEXTURE_2D, this->colorBuffer);
-//  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->colorBuffer, 0);
-  
-  GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
-  glDrawBuffers(1, drawBuffers);
+//  GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+//  glDrawBuffers(1, drawBuffers);
 }
 
 void bar::Framebuffer::draw(float delta) const {
@@ -55,19 +52,13 @@ void bar::Framebuffer::draw(float delta) const {
   
   Mesh * const mesh = this->mesh;
   mesh->activate();
-  LogGLError(__LINE__, __FILE__);
   mesh->update(delta);
-  LogGLError(__LINE__, __FILE__);
   mesh->bindProjection(projection);
   //mesh->bindModelView();
-  LogGLError(__LINE__, __FILE__);
   
-  glActiveTexture(GL_TEXTURE0);
-  LogGLError(__LINE__, __FILE__);
-  glBindTexture(GL_TEXTURE_2D, this->colorBuffer);
-  LogGLError(__LINE__, __FILE__);
-  glBindSampler(0, this->sampler);
-  LogGLError(__LINE__, __FILE__);
+  this->texture->bind(GL_TEXTURE0);
+  this->texParams->bind(0);
+  
   mesh->bind("framebuffer", 0);
   
 //  mesh->validate();
@@ -75,10 +66,9 @@ void bar::Framebuffer::draw(float delta) const {
                  mesh->getElementCount(),
                  mesh->getElementType(),
                  nullptr);
-  LogGLError(__LINE__, __FILE__);
   
-  glBindSampler(0, 0);
-  glBindTexture(GL_TEXTURE_2D, 0);
+  this->texParams->unbind(0);
+  this->texture->unbind(GL_TEXTURE0);
   mesh->deactivate();
 }
 
@@ -90,17 +80,17 @@ void bar::Framebuffer::resize(float width, float height) {
   
   this->bind();
   this->initColorBuffer();
-//  this->initRenderBuffer();
+  this->initRenderBuffer();
   
   if (!this->isComplete()) {
     fprintf(stderr, "Framebuffer failed to initialize. Aborting.\n");
     std::exit(EXIT_FAILURE);
   }
   
-  GLenum drawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+  GLenum drawBuffers[2] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
   glDrawBuffers(1, drawBuffers);
   
-  fprintf(stdout, "Framebuffer: Object: %d, ColorBuffer: %d\n", this->fbo, this->colorBuffer);
+  fprintf(stdout, "Framebuffer: Object: %d, ColorBuffer: %d\n", this->fbo, this->texture->getName());
   
   this->unbind();
 }
@@ -111,20 +101,15 @@ bool bar::Framebuffer::isComplete() const {
 }
 
 void bar::Framebuffer::initColorBuffer() {
-  glGenTextures(1, &this->colorBuffer);
-  glBindTexture(GL_TEXTURE_2D, this->colorBuffer);
+  this->texture = new Texture(this->width, this->height, nullptr);
+  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->texture->getName(), 0);
   
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, this->width, this->height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-  glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->colorBuffer, 0);
-  
-  glBindTexture(GL_TEXTURE_2D, 0);
-  
-  glGenSamplers(1, &this->sampler);
-  glSamplerParameteri(this->sampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glSamplerParameteri(this->sampler, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-  glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glSamplerParameteri(this->sampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  this->texParams = new TextureParameters();
+  this->texParams->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  this->texParams->setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  this->texParams->setParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+  this->texParams->setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  this->texParams->setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void bar::Framebuffer::initRenderBuffer() {
@@ -141,15 +126,19 @@ void bar::Framebuffer::initRenderBuffer() {
 
 void bar::Framebuffer::clear() {
   this->bind();
-//  this->clearRenderBuffer();
+  this->clearRenderBuffer();
   this->clearColorBuffer();
   this->unbind();
 }
 
 void bar::Framebuffer::clearColorBuffer() {
   glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0);
-  glDeleteTextures(1, &this->colorBuffer);
-  this->colorBuffer = 0;
+  if (this->texture != nullptr && this->texParams != nullptr) {
+    delete this->texture;
+    delete this->texParams;
+    this->texture = nullptr;
+    this->texParams = nullptr;
+  }
 }
 
 void bar::Framebuffer::clearRenderBuffer() {
