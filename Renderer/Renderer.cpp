@@ -75,8 +75,7 @@ void bar::Renderer::draw(float delta) const {
   
   LogGLError(__LINE__, __FILE__);
   
-  glFlush();
-//  delete [] pixels;
+//  glFlush();
 }
 
 void bar::Renderer::clear() const {
