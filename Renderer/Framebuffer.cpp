@@ -101,7 +101,16 @@ bool bar::Framebuffer::isComplete() const {
 }
 
 void bar::Framebuffer::initColorBuffer() {
-  this->texture = new Texture(this->width, this->height, nullptr);
+  TextureContext context = {
+    TextureDimension::TWO,
+    TextureType::COLOR,
+    TextureDataType::UBYTE,
+    this->width,
+    this->height,
+    0,
+    nullptr
+  };
+  this->texture = new Texture(context);
   glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, this->texture->getName(), 0);
   
   this->texParams = new TextureParameters();
