@@ -34,23 +34,25 @@ class Framebuffer {
   
  private:
   void initColorBuffer();
-  void initRenderBuffer();
+  void initDepthBuffer();
+  void initNormalBuffer();
   
   void clear();
   void clearColorBuffer();
-  void clearRenderBuffer();
+  void clearDepthBuffer();
+  void clearNormalBuffer();
   
   GLuint width;
   GLuint height;
   
   GLuint fbo;
-//  GLuint colorBuffer;
-  GLuint depthStencilBuffer;
   
-//  GLuint sampler;
-  
-  Texture *texture;
-  TextureParameters *texParams;
+  Texture *color;
+  TextureParameters *colorParams;
+  Texture *depth;
+  TextureParameters *depthParams;
+  Texture *normal;
+  TextureParameters *normalParams;
   Mesh *mesh;
 };
   

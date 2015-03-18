@@ -14,6 +14,35 @@
 #include <OpenGL/gl3.h>
 
 namespace bar {
+enum TextureDimension {
+  ONE,
+  TWO,
+  THREE
+};
+  
+enum TextureType {
+  COLOR,
+  DEPTH,
+  DEPTH_STENCIL
+};
+
+enum TextureDataType {
+  UBYTE,
+  BYTE,
+  UINT,
+  INT,
+  FLOAT
+};
+  
+struct TextureContext {
+  TextureDimension dimension;
+  TextureType type;
+  TextureDataType dataType;
+  uint32_t width;
+  uint32_t height;
+  uint32_t depth;
+  void *data;
+};
   
 class TextureParameters {
  public:
@@ -31,7 +60,7 @@ class TextureParameters {
 
 class Texture {
  public:
-  Texture(GLuint width, GLuint height, const void *data);
+  Texture(TextureContext &context);
   virtual ~Texture();
   
   void bind(GLenum textureUnit) const;
@@ -41,6 +70,7 @@ class Texture {
   
  private:
   GLuint name;
+  GLenum target;
 };
 
 }

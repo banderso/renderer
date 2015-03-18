@@ -8,6 +8,11 @@
 
 #include "Texture.h"
 
+#include <cstdlib>
+
+// TextureParameters
+////////////////////////////////////////////////////////////////////////////////
+
 bar::TextureParameters::TextureParameters() {
   glGenSamplers(1, &this->name);
 }
@@ -28,11 +33,65 @@ void bar::TextureParameters::setParameter(GLenum name, GLint value) const {
   glSamplerParameteri(this->name, name, value);
 }
 
-bar::Texture::Texture(GLuint width, GLuint height, const void *data) {
+// Texture
+////////////////////////////////////////////////////////////////////////////////
+
+bar::Texture::Texture(TextureContext &context) {
+  GLenum target;
+  GLsizei width = static_cast<GLsizei>(context.width);
+  GLsizei height = static_cast<GLsizei>(context.height);
+  GLsizei depth = static_cast<GLsizei>(context.depth);
+  GLint internalFormat;
+  GLenum format;
+  GLenum type;
+  
+  if (TextureType::COLOR == context.type) {
+    internalFormat = GL_RGBA;
+    format = GL_BGRA;
+  } else if (TextureType::DEPTH == context.type) {
+    internalFormat = GL_DEPTH_COMPONENT;
+    format = GL_DEPTH_COMPONENT;
+  } else if (TextureType::DEPTH_STENCIL == context.type) {
+    internalFormat = GL_DEPTH_STENCIL;
+    format = GL_DEPTH_STENCIL;
+  } else {
+    fprintf(stderr, "Unknown texture type.\n");
+    std::exit(EXIT_FAILURE);
+  }
+  
+  if (TextureDataType::UBYTE == context.dataType) {
+    type = GL_UNSIGNED_BYTE;
+  } else if (TextureDataType::BYTE == context.dataType) {
+    type = GL_BYTE;
+  } else if (TextureDataType::UINT == context.dataType) {
+    type = GL_UNSIGNED_INT_8_8_8_8_REV;
+  } else if (TextureDataType::INT == context.dataType) {
+    type = GL_INT;
+  } else if (TextureDataType::FLOAT == context.dataType) {
+    type = GL_FLOAT;
+  } else {
+    fprintf(stderr, "Unknown texture data type.\n");
+    std::exit(EXIT_FAILURE);
+  }
+  
   glGenTextures(1, &this->name);
-  glBindTexture(GL_TEXTURE_2D, this->name);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-  glBindTexture(GL_TEXTURE_2D, 0);
+  
+  if (TextureDimension::ONE == context.dimension) {
+    target = GL_TEXTURE_1D;
+    glBindTexture(target, this->name);
+    glTexImage1D(target, 0, internalFormat, width, 0, format, type, context.data);
+  } else if (TextureDimension::TWO == context.dimension) {
+    target = GL_TEXTURE_2D;
+    glBindTexture(target, this->name);
+    glTexImage2D(target, 0, internalFormat, width, height, 0, format, type, context.data);
+  } else if (TextureDimension::THREE == context.dimension) {
+    target = GL_TEXTURE_3D;
+    glBindTexture(target, this->name);
+    glTexImage3D(target, 0, internalFormat, width, height, depth, 0, format, type, context.data);
+  }
+  
+  glBindTexture(target, 0);
+  this->target = target;
 }
 
 bar::Texture::~Texture() {
@@ -41,12 +100,12 @@ bar::Texture::~Texture() {
 
 void bar::Texture::bind(GLuint textureUnit) const {
   glActiveTexture(textureUnit);
-  glBindTexture(GL_TEXTURE_2D, this->name);
+  glBindTexture(this->target, this->name);
 }
 
 void bar::Texture::unbind(GLuint textureUnit) const {
   glActiveTexture(textureUnit);
-  glBindTexture(GL_TEXTURE_2D, 0);
+  glBindTexture(this->target, 0);
 }
 
 GLuint bar::Texture::getName() const {
