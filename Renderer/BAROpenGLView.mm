@@ -264,10 +264,10 @@ float lastDelta = 0.0f;
   };
   
   GLfloat post_texture_coords[] = {
-    0.0, 0.0,
-    1.0, 0.0,
     0.0, 1.0,
-    1.0, 1.0
+    1.0, 1.0,
+    0.0, 0.0,
+    1.0, 0.0
   };
   
   GLuint post_element_vals[] = {

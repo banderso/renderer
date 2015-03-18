@@ -16,7 +16,7 @@ uniform mat4 projection;
 void main() {
   varDelta = delta;
   varVertex = position;
-  varNormal = normal;
+  varNormal = (modelView * vec4(normal, 1.0)).xyz;
   varModelView = modelView;
   varModelViewInverseTranspose = transpose(inverse(modelView));
   
